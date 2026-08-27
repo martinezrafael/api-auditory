@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import AddressModel from "./Address.js";
 
 const CompanyModel = new mongoose.Schema(
   {
@@ -23,7 +24,8 @@ const CompanyModel = new mongoose.Schema(
       required: [true, "CNAE é um campo obrigatório."],
     },
     address: {
-      type: String,
+      type: AddressModel,
+      required: [true, "Endereço é um campo obrigatório."],
     },
     contactPhone: {
       type: Number,
