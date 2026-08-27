@@ -1,0 +1,10 @@
+{
+  "name": "api-auditory",
+  "version": "1.0.0",
+  "description": "API para realizar auditoria financeira de pequenas e médias empresas",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {},
+  "keywords": ["API", "Backend", "Auditoria"],
+  "author": "Rafael Molina Martinez"
+}
