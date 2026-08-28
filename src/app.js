@@ -1,6 +1,8 @@
 import express from "express";
 import connectToDatabase from "./config/database.js";
 
+import routes from "./routes/index.js";
+
 const database = await connectToDatabase();
 
 database.on("error", (error) => {
@@ -13,6 +15,6 @@ database.once("open", () => {
 
 const app = express();
 
-app.use(express.json());
+routes(app);
 
 export default app;

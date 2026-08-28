@@ -35,7 +35,7 @@ const CompanyModel = new mongoose.Schema(
       type: String,
     },
     creditScore: {
-      Type: Number,
+      type: Number,
     },
   },
   {

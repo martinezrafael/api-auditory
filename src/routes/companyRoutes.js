@@ -3,6 +3,10 @@ import companyController from "../controllers/companyController.js";
 
 const routes = express.Router();
 
-routes.get("/companies", companyController.createCompany);
+routes.post("/companies", companyController.createCompany);
+routes.get("/companies", companyController.getAllCompanies);
+routes.get("/companies/:id", companyController.getCompanyById);
+routes.put("/companies/:id", companyController.updateCompany);
+routes.delete("/companies/:id", companyController.deleteCompany);
 
 export default routes;

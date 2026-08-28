@@ -29,9 +29,9 @@ const AddressModel = new mongoose.Schema(
       type: String,
       required: [true, "Estado (UF) é um campo obrigatório."],
       uppercase: true,
-      enum: [
-        values[
-          ("AC",
+      enum: {
+        values: [
+          "AC",
           "AL",
           "AP",
           "AM",
@@ -57,10 +57,10 @@ const AddressModel = new mongoose.Schema(
           "SC",
           "SP",
           "SE",
-          "TO")
+          "TO",
         ],
-      ],
-      message: "{VALUE} não é um estado brasileiro válido.",
+        message: "{VALUE} não é um estado brasileiro válido.",
+      },
     },
   },
   { versionKey: false, timestamps: true, _id: false },
