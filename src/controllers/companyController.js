@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import companyModel from "../models/Company.js";
 
 class companyController {
@@ -7,12 +8,12 @@ class companyController {
       const companySaved = await companyCreated.save();
 
       res.status(201).json({
-        message: "Empresa criada com sucesso!",
+        message: "Empresa criada com sucesso.",
         company: companySaved,
       });
     } catch (error) {
       res.status(500).json({
-        message: "Erro interno de servidor",
+        message: "Erro interno de servidor.",
         error: error.message,
       });
     }
@@ -25,7 +26,7 @@ class companyController {
       res.status(200).json(allCompanies);
     } catch (error) {
       res.status(500).json({
-        message: "Erro interno de servidor",
+        message: "Erro interno de servidor.",
         error: error.message,
       });
     }
@@ -36,12 +37,24 @@ class companyController {
       const { id } = req.params;
       const company = await companyModel.findById(id);
 
-      res.status(200).json(company);
+      if (company !== null) {
+        res.status(200).json(company);
+      } else {
+        res.status(404).json({
+          message: "Empresa não localizada.",
+        });
+      }
     } catch (error) {
-      res.status(500).json({
-        message: "Erro interno de servidor",
-        error: error.message,
-      });
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(400).json({
+          message: "Um ou mais dados fornecidos estão incorretos.",
+        });
+      } else {
+        res.status(500).json({
+          message: "Erro interno de servidor.",
+          error: error.message,
+        });
+      }
     }
   };
 
@@ -56,7 +69,7 @@ class companyController {
 
       if (company !== null) {
         res.status(200).json({
-          message: "Atualização de dados realizada com sucesso",
+          message: "Dados da empresa atualizados com sucesso.",
         });
       } else {
         res.status(404).json({
@@ -64,10 +77,16 @@ class companyController {
         });
       }
     } catch (error) {
-      res.status(500).json({
-        message: "Erro interno de servidor.",
-        error: error.message,
-      });
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(400).json({
+          message: "Um ou mais dados fornecidos estão incorretos.",
+        });
+      } else {
+        res.status(500).json({
+          message: "Erro interno de servidor.",
+          error: error.message,
+        });
+      }
     }
   };
 
@@ -78,7 +97,7 @@ class companyController {
 
       if (company !== null) {
         res.status(200).json({
-          message: "Empresa deletada com sucesso.",
+          message: "Dados da empresa deletados com sucesso.",
         });
       } else {
         res.status(404).json({
@@ -86,10 +105,16 @@ class companyController {
         });
       }
     } catch (error) {
-      res.status(500).json({
-        message: "Erro interno de servidor.",
-        error: error.message,
-      });
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(400).json({
+          message: "Um ou mais dados fornecidos estão incorretos.",
+        });
+      } else {
+        res.status(500).json({
+          message: "Erro interno de servidor.",
+          error: error.message,
+        });
+      }
     }
   };
 }
