@@ -3,8 +3,8 @@ import NotFoundError from "../errors/NotFoundError.js";
 
 function errorHandler(error, req, res, next) {
   // Trata o nosso erro customizado de 404
-  if (err instanceof NotFoundError) {
-    return res.status(err.status).json({ message: err.message });
+  if (error instanceof NotFoundError) {
+    return res.status(error.status).json({ message: error.message });
   }
 
   // Trata o CastError (ex: formato de ID inválido)
@@ -16,7 +16,7 @@ function errorHandler(error, req, res, next) {
 
   // Trata erros de validação do Schema
   if (error instanceof mongoose.Error.ValidationError) {
-    const errorMessages = Object.values(err.errors).map((val) => val.message);
+    const errorMessages = Object.values(error.errors).map((val) => val.message);
     return res.status(400).json({
       message: "Erro de validação de dados.",
       errors: errorMessages,
@@ -24,10 +24,10 @@ function errorHandler(error, req, res, next) {
   }
 
   // Fallback: Erro genérico de servidor
-  console.error(err);
+  console.error(error);
   return res.status(500).json({
     message: "Erro interno de servidor.",
-    error: err.message,
+    error: error.message,
   });
 }
 

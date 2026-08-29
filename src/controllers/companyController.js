@@ -1,3 +1,4 @@
+import NotFoundError from "../errors/NotFoundError.js";
 import companyModel from "../models/Company.js";
 
 class companyController {
