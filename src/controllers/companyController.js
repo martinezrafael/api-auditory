@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import companyModel from "../models/Company.js";
 
 class companyController {
-  static createCompany = async (req, res) => {
+  static createCompany = async (req, res, next) => {
     try {
       const companyCreated = new companyModel(req.body);
       const companySaved = await companyCreated.save();
@@ -12,27 +12,21 @@ class companyController {
         company: companySaved,
       });
     } catch (error) {
-      res.status(500).json({
-        message: "Erro interno de servidor.",
-        error: error.message,
-      });
+      next(error);
     }
   };
 
-  static getAllCompanies = async (req, res) => {
+  static getAllCompanies = async (req, res, next) => {
     try {
       const allCompanies = await companyModel.find();
 
       res.status(200).json(allCompanies);
     } catch (error) {
-      res.status(500).json({
-        message: "Erro interno de servidor.",
-        error: error.message,
-      });
+      next(error);
     }
   };
 
-  static getCompanyById = async (req, res) => {
+  static getCompanyById = async (req, res, next) => {
     try {
       const { id } = req.params;
       const company = await companyModel.findById(id);
@@ -45,20 +39,11 @@ class companyController {
         });
       }
     } catch (error) {
-      if (error instanceof mongoose.Error.CastError) {
-        res.status(400).json({
-          message: "Um ou mais dados fornecidos estão incorretos.",
-        });
-      } else {
-        res.status(500).json({
-          message: "Erro interno de servidor.",
-          error: error.message,
-        });
-      }
+      next(error);
     }
   };
 
-  static updateCompany = async (req, res) => {
+  static updateCompany = async (req, res, next) => {
     try {
       const { id } = req.params;
       const payload = req.body;
@@ -77,20 +62,11 @@ class companyController {
         });
       }
     } catch (error) {
-      if (error instanceof mongoose.Error.CastError) {
-        res.status(400).json({
-          message: "Um ou mais dados fornecidos estão incorretos.",
-        });
-      } else {
-        res.status(500).json({
-          message: "Erro interno de servidor.",
-          error: error.message,
-        });
-      }
+      next(error);
     }
   };
 
-  static deleteCompany = async (req, res) => {
+  static deleteCompany = async (req, res, next) => {
     try {
       const { id } = req.params;
       const company = await companyModel.findByIdAndDelete(id);
@@ -105,16 +81,7 @@ class companyController {
         });
       }
     } catch (error) {
-      if (error instanceof mongoose.Error.CastError) {
-        res.status(400).json({
-          message: "Um ou mais dados fornecidos estão incorretos.",
-        });
-      } else {
-        res.status(500).json({
-          message: "Erro interno de servidor.",
-          error: error.message,
-        });
-      }
+      next(error);
     }
   };
 }
