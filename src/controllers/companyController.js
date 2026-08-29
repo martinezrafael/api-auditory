@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import companyModel from "../models/Company.js";
 
 class companyController {
