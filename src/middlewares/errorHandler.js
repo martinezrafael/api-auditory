@@ -1,6 +1,12 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
+import NotFoundError from "../errors/NotFoundError.js";
 
 function errorHandler(error, req, res, next) {
+  // Trata o nosso erro customizado de 404
+  if (err instanceof NotFoundError) {
+    return res.status(err.status).json({ message: err.message });
+  }
+
   // Trata o CastError (ex: formato de ID inválido)
   if (error instanceof mongoose.Error.CastError) {
     return res.status(400).json({

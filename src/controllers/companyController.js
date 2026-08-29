@@ -31,13 +31,11 @@ class companyController {
       const { id } = req.params;
       const company = await companyModel.findById(id);
 
-      if (company !== null) {
-        res.status(200).json(company);
-      } else {
-        res.status(404).json({
-          message: "Empresa não localizada.",
-        });
+      if (!company) {
+        return next(new NotFoundError("Empresa não localizada."));
       }
+
+      res.status(200).json(company);
     } catch (error) {
       next(error);
     }
@@ -52,15 +50,13 @@ class companyController {
         $set: payload,
       });
 
-      if (company !== null) {
-        res.status(200).json({
-          message: "Dados da empresa atualizados com sucesso.",
-        });
-      } else {
-        res.status(404).json({
-          message: "Empresa não localizada.",
-        });
+      if (!company) {
+        return next(new NotFoundError("Empresa não localizada."));
       }
+
+      res.status(200).json({
+        message: "Dados da empresa atualizados com sucesso.",
+      });
     } catch (error) {
       next(error);
     }
@@ -71,15 +67,13 @@ class companyController {
       const { id } = req.params;
       const company = await companyModel.findByIdAndDelete(id);
 
-      if (company !== null) {
-        res.status(200).json({
-          message: "Dados da empresa deletados com sucesso.",
-        });
-      } else {
-        res.status(404).json({
-          message: "Empresa não localizada.",
-        });
+      if (!company) {
+        return next(new NotFoundError("Empresa não localizada."));
       }
+
+      res.status(200).json({
+        message: "Dados da empresa deletados com sucesso.",
+      });
     } catch (error) {
       next(error);
     }
