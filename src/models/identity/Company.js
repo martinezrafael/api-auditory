@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import AddressModel from "./Address.js";
+import AddressModel from "../Address.js";
 
 const CompanyModel = new mongoose.Schema(
   {

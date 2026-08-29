@@ -1,5 +1,5 @@
 import NotFoundError from "../errors/NotFoundError.js";
-import companyModel from "../models/Company.js";
+import companyModel from "../models/identity/Company.js";
 
 class companyController {
   static createCompany = async (req, res, next) => {
