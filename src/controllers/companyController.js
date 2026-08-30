@@ -19,7 +19,6 @@ class companyController {
   static getAllCompanies = async (req, res, next) => {
     try {
       const allCompanies = await companyModel.find();
-
       res.status(200).json(allCompanies);
     } catch (error) {
       next(error);
