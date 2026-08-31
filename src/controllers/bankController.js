@@ -74,7 +74,7 @@ class bankController {
         message: "Dados da instituição bancária deletados com sucesso.",
       });
     } catch (error) {
-      nnext(error);
+      next(error);
     }
   };
 }
