@@ -5,7 +5,7 @@ const AuditModel = new mongoose.Schema(
     id: {
       type: mongoose.Schema.Types.ObjectId,
     },
-    ScheduleDate: {
+    scheduleDate: {
       type: Date,
       required: [true, "Data agendada é um campo obrigatório."],
     },
@@ -13,7 +13,7 @@ const AuditModel = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    deadLine: {
+    deadline: {
       type: Date,
       required: [true, "Prazo limite é um campo obrigatório."],
     },

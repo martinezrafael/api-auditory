@@ -5,7 +5,7 @@ class auditController {
   static createAudit = async (req, res, next) => {
     try {
       const auditCreated = new auditModel(req.body);
-      const auditSaved = auditCreated.save();
+      const auditSaved = await auditCreated.save();
 
       res.status(201).json({
         message: "Auditoria criada com sucesso.",
@@ -19,7 +19,7 @@ class auditController {
   static getAllAudits = async (req, res, next) => {
     try {
       const allAudits = await auditModel.find();
-      res.stat(200).json(allAudits);
+      res.status(200).json(allAudits);
     } catch (error) {
       next(error);
     }
