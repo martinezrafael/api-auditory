@@ -1,7 +1,7 @@
 import NotFoundError from "../errors/NotFoundError.js";
 import auditModel from "../models/auditing/Audit.js";
 
-class auditController {
+class AuditController {
   static createAudit = async (req, res, next) => {
     try {
       const auditCreated = new auditModel(req.body);
@@ -79,4 +79,4 @@ class auditController {
   };
 }
 
-export default auditController;
+export default AuditController;

@@ -1,7 +1,7 @@
 import NotFoundError from "../errors/NotFoundError.js";
 import companyModel from "../models/identity/Company.js";
 
-class companyController {
+class CompanyController {
   static createCompany = async (req, res, next) => {
     try {
       const companyCreated = new companyModel(req.body);
@@ -79,4 +79,4 @@ class companyController {
   };
 }
 
-export default companyController;
+export default CompanyController;

@@ -1,7 +1,7 @@
 import NotFoundError from "../errors/NotFoundError.js";
 import documentModel from "../models/auditing/Document.js";
 
-class documentController {
+class DocumentController {
   static createDocument = async (req, res, next) => {
     try {
       const documentCreated = new documentModel(req.body);
@@ -79,4 +79,4 @@ class documentController {
   };
 }
 
-export default documentController;
+export default DocumentController;

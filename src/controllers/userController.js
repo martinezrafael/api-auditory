@@ -1,7 +1,7 @@
 import NotFoundError from "../errors/NotFoundError.js";
 import userModel from "../models/identity/User.js";
 
-class userController {
+class UserController {
   static createUser = async (req, res, next) => {
     try {
       const userCreated = new userModel(req.body);
@@ -79,4 +79,4 @@ class userController {
   };
 }
 
-export default userController;
+export default UserController;

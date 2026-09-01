@@ -1,12 +1,12 @@
 import express from "express";
-import auditController from "../controllers/auditController.js";
+import AuditController from "../controllers/auditController.js";
 
 const routes = express.Router();
 
-routes.post("/audits", auditController.createAudit);
-routes.get("/audits", auditController.getAllAudits);
-routes.get("/audits/:id", auditController.getAuditById);
-routes.put("/audits/:id", auditController.updateAudit);
-routes.delete("/audits/:id", auditController.deleteAudit);
+routes.post("/audits", AuditController.createAudit);
+routes.get("/audits", AuditController.getAllAudits);
+routes.get("/audits/:id", AuditController.getAuditById);
+routes.put("/audits/:id", AuditController.updateAudit);
+routes.delete("/audits/:id", AuditController.deleteAudit);
 
 export default routes;

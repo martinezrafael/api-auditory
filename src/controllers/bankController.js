@@ -1,7 +1,7 @@
 import NotFoundError from "../errors/NotFoundError.js";
 import bankModel from "../models/identity/Bank.js";
 
-class bankController {
+class BankController {
   static createBank = async (req, res, next) => {
     try {
       const bankCreated = new bankModel(req.body);
@@ -79,4 +79,4 @@ class bankController {
   };
 }
 
-export default bankController;
+export default BankController;
