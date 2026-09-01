@@ -6,6 +6,7 @@ import auditRoutes from "./auditRoutes.js";
 import documentRoutes from "./documentRoutes.js";
 import bankAccountRoutes from "./bankAccountRoutes.js";
 import bankTransactionRoutes from "./bankTransactionRoutes.js";
+import cardAcquirerRoutes from "./cardAcquirerRoutes.js";
 
 const routes = (app) => {
   app.use(
@@ -17,6 +18,7 @@ const routes = (app) => {
     documentRoutes,
     bankAccountRoutes,
     bankTransactionRoutes,
+    cardAcquirerRoutes,
   );
 };
 
