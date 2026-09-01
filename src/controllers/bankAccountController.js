@@ -1,5 +1,5 @@
 import NotFoundError from "../errors/NotFoundError.js";
-import bankAccountModel from "../models/BankAccount.js";
+import bankAccountModel from "../models/banking/BankAccount.js";
 
 class BankAccountController {
   static createBankAccount = async (req, res, next) => {
