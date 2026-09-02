@@ -8,7 +8,7 @@ import bankAccountRoutes from "./bankAccountRoutes.js";
 import bankTransactionRoutes from "./bankTransactionRoutes.js";
 import cardAcquirerRoutes from "./cardAcquirerRoutes.js";
 import cardTransactionRoutes from "./cardTransactionRoutes.js";
-import settlementRoutes from "./settlementRourtes.js";
+import settlementRoutes from "./settlementRoutes.js";
 import creditRequestRoutes from "./creditRequestRoutes.js";
 import creditOfferRoutes from "./creditOfferRoutes.js";
 

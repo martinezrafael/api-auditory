@@ -1,81 +1,37 @@
-import NotFoundError from "../errors/NotFoundError.js";
-import userModel from "../models/identity/User.js";
+import UserService from "../services/UserService.js";
 
 class UserController {
-  static createUser = async (req, res, next) => {
-    try {
-      const userCreated = new userModel(req.body);
-      const userSaved = await userCreated.save();
-
-      res.status(201).json({
-        message: "Usuário criado com sucesso.",
-        user: userSaved,
-      });
-    } catch (error) {
-      next(error);
-    }
+  static createUser = async (req, res) => {
+    const user = await UserService.create(req.body);
+    res.status(201).json({
+      message: "Usuário criado com sucesso.",
+      user: user,
+    });
   };
 
-  static getAllUsers = async (req, res, next) => {
-    try {
-      const allUsers = await userModel.find();
-      res.status(200).json(allUsers);
-    } catch (error) {
-      next(error);
-    }
+  static getAllUsers = async (req, res) => {
+    const allUsers = await UserService.getAll();
+    res.status(200).json(allUsers);
   };
 
-  static getUserById = async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const user = await userModel.findById(id);
-
-      if (!user) {
-        return next(new NotFoundError("Usuário não localizado."));
-      }
-
-      res.status(200).json(user);
-    } catch (error) {
-      next(error);
-    }
+  static getUserById = async (req, res) => {
+    const user = await UserService.getById(req.params.id);
+    res.status(200).json(user);
   };
 
-  static updateUser = async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const payload = req.body;
-
-      const user = await userModel.findByIdAndUpdate(id, {
-        $set: payload,
-      });
-
-      if (!user) {
-        return next(new NotFoundError("Usuário não localizado"));
-      }
-
-      res.status(200).json({
-        message: "Dados do usuário atualizados com sucesso.",
-      });
-    } catch (error) {
-      next(error);
-    }
+  static updateUser = async (req, res) => {
+    const user = await UserService.update(req.params.id, req.body);
+    res.status(200).json({
+      message: "Dados do usuário atualizados com sucesso.",
+      user: user,
+    });
   };
 
-  static deleteUser = async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const user = await userModel.findByIdAndDelete(id);
-
-      if (!user) {
-        return next(new NotFoundError("Usuário não localizado"));
-      }
-
-      res.status(200).json({
-        message: "Dados do usuário deletados com sucesso.",
-      });
-    } catch (error) {
-      next(error);
-    }
+  static deleteUser = async (req, res) => {
+    await UserService.delete(req.params.id);
+    res.status(200).json({
+      message: "Dados do usuário deletados com sucesso.",
+    });
   };
 }
 
