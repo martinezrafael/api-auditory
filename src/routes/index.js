@@ -9,6 +9,7 @@ import bankTransactionRoutes from "./bankTransactionRoutes.js";
 import cardAcquirerRoutes from "./cardAcquirerRoutes.js";
 import cardTransactionRoutes from "./cardTransactionRoutes.js";
 import settlementRoutes from "./settlementRourtes.js";
+import creditRequestRoutes from "./creditRequestRoutes.js";
 
 const routes = (app) => {
   app.use(
@@ -23,6 +24,7 @@ const routes = (app) => {
     cardAcquirerRoutes,
     cardTransactionRoutes,
     settlementRoutes,
+    creditRequestRoutes,
   );
 };
 
