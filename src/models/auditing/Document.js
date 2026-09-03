@@ -5,7 +5,7 @@ const DocumentModel = new mongoose.Schema(
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "companies",
-      required: [true, "Empresa é um campo obrigatório"],
+      required: [true, "O campo 'Empresa' é obrigatório."],
     },
     audit: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,15 +14,15 @@ const DocumentModel = new mongoose.Schema(
     },
     documentType: {
       type: String,
-      required: [true, "Tipo de documento é um campo obrigatório."],
+      required: [true, "O campo 'Tipo de documento' é obrigatório."],
       enum: {
         values: ["ID", "SOCIAL_CONTRACT", "BANK_STATEMENT", "TAX_RECEIPT"],
-        message: "O tipo {VALUE} não é um tipo válido.",
+        message: "O valor '{VALUE}' não é um tipo de documento válido.",
       },
     },
     fileUrl: {
       type: String,
-      required: [true, "Caminho para o arquivo é um campo obrigatório."],
+      required: [true, "O campo 'URL do arquivo' é obrigatório."],
     },
     uploadDate: {
       type: Date,
@@ -30,12 +30,12 @@ const DocumentModel = new mongoose.Schema(
     },
     validationStatus: {
       type: String,
+      required: [true, "O campo 'Status de validação' é obrigatório."],
       enum: {
         values: ["PENDING", "VALIDATED", "REJECTED"],
-        message: "{VALUE} não é um status válido.",
+        message: "O valor '{VALUE}' não é um status de validação válido.",
       },
       default: "PENDING",
-      required: [true, "Status de validação é um campo obrigatório."],
     },
   },
   { versionKey: false, timestamps: true },

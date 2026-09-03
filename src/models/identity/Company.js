@@ -5,7 +5,7 @@ const CompanyModel = new mongoose.Schema(
   {
     legalName: {
       type: String,
-      required: [true, "Razão Social é um campo obrigatório."],
+      required: [true, "O campo 'Razão Social' é obrigatório."],
       unique: true,
     },
     tradeName: {
@@ -13,20 +13,20 @@ const CompanyModel = new mongoose.Schema(
     },
     documentNumber: {
       type: String,
-      required: [true, "CNPJ é um campo obrigatório."],
+      required: [true, "O campo 'CNPJ' é obrigatório."],
       unique: true,
     },
     cnaeCode: {
       type: String,
-      required: [true, "CNAE é um campo obrigatório."],
+      required: [true, "O campo 'CNAE' é obrigatório."],
     },
     address: {
       type: AddressModel,
-      required: [true, "Endereço é um campo obrigatório."],
+      required: [true, "O campo 'Endereço' é obrigatório."],
     },
     contactPhone: {
       type: Number,
-      required: [true, "Telefone para contato é um campo obrigatório."],
+      required: [true, "O campo 'Telefone de contato' é obrigatório."],
     },
     contactEmail: {
       type: String,

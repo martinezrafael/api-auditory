@@ -5,12 +5,12 @@ const settlementSchema = new mongoose.Schema(
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "companies",
-      required: [true, "Empresa é um campo obrigatório."],
+      required: [true, "O campo 'Empresa' é obrigatório."],
     },
     acquirer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "cardAcquirers",
-      required: [true, "Adquirente é um campo obrigatório."],
+      required: [true, "O campo 'Adquirente' é obrigatório."],
     },
     bankAccount: {
       type: mongoose.Schema.Types.ObjectId,
@@ -19,24 +19,23 @@ const settlementSchema = new mongoose.Schema(
     },
     settlementDate: {
       type: Date,
-      required: [true, "Data do repasse é um campo obrigatório."],
+      required: [true, "O campo 'Data do repasse' é obrigatório."],
     },
     expectedDate: {
       type: Date,
-      required: [true, "Data esperada do repasse é um campo obrigatório."],
+      required: [true, "O campo 'Data prevista' é obrigatório."],
     },
     settlementAmount: {
       type: Number,
-      required: [true, "Valor do repasse é um campo obrigatório."],
+      required: [true, "O campo 'Valor do repasse' é obrigatório."],
     },
     status: {
       type: String,
-      required: [true, "Status do repasse é um campo obrigatório."],
+      required: [true, "O campo 'Status' é obrigatório."],
       trim: true,
       enum: {
         values: ["SCHEDULED", "PAID", "DISPUTED"],
-        message:
-          "Status do repasse inválido. Deve ser 'SCHEDULED', 'PAID' ou 'DISPUTED'.",
+        message: "O valor '{VALUE}' não é um status de repasse válido.",
       },
     },
   },

@@ -5,28 +5,28 @@ const UserModel = new mongoose.Schema(
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "companies",
-      required: [true, "Empresa é um campo obrigatório."],
+      required: [true, "O campo 'Empresa' é obrigatório."],
     },
     fullName: {
       type: String,
-      required: [true, "Nome completo é um campo obrigatório."],
+      required: [true, "O campo 'Nome completo' é obrigatório."],
     },
     email: {
       type: String,
-      required: [true, "E-mail é um campo obrigatório."],
+      required: [true, "O campo 'E-mail' é obrigatório."],
     },
     password: {
       type: String,
-      required: [true, "Senha é um campo obrigatório."],
-      minLength: [8, "Senha deve ter pelo menos 8 caracteres."],
+      required: [true, "O campo 'Senha' é obrigatório."],
+      minLength: [8, "O campo 'Senha' deve ter no mínimo 8 caracteres."],
       select: false,
     },
     role: {
       type: String,
-      required: [true, "Tipo de usuário é um campo obrigatório."],
+      required: [true, "O campo 'Tipo de usuário' é obrigatório."],
       enum: {
         values: ["ADMIN", "AUDITOR", "BUSINESS_OWNER", "BANK_MANAGER"],
-        message: "{VALUE} não é um tipo válido.",
+        message: "O valor '{VALUE}' não é um tipo de usuário válido.",
       },
     },
     isActive: {

@@ -5,7 +5,7 @@ const AuditModel = new mongoose.Schema(
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "companies",
-      required: [true, "Empresa é um campo obrigatório."],
+      required: [true, "O campo 'Empresa' é obrigatório."],
     },
     auditor: {
       type: mongoose.Schema.Types.ObjectId,
@@ -13,7 +13,7 @@ const AuditModel = new mongoose.Schema(
     },
     scheduleDate: {
       type: Date,
-      required: [true, "Data agendada é um campo obrigatório."],
+      required: [true, "O campo 'Data agendada' é obrigatório."],
     },
     completionDate: {
       type: Date,
@@ -21,17 +21,20 @@ const AuditModel = new mongoose.Schema(
     },
     deadline: {
       type: Date,
-      required: [true, "Prazo limite é um campo obrigatório."],
+      required: [true, "O campo 'Prazo limite' é obrigatório."],
     },
     status: {
       type: String,
-      enum: ["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELED"],
+      required: [true, "O campo 'Status' é obrigatório."],
+      enum: {
+        values: ["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELED"],
+        message: "O valor '{VALUE}' não é um status de auditoria válido.",
+      },
       default: "PENDING",
-      required: [true, "Status é um campo obrigatório."],
     },
     auditorName: {
       type: String,
-      required: [true, "Nome do auditor é um campo obrigatório."],
+      required: [true, "O campo 'Nome do auditor' é obrigatório."],
       trim: true,
     },
     notes: {

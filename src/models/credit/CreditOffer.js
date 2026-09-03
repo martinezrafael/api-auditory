@@ -4,7 +4,7 @@ const CreditOfferSchema = new mongoose.Schema({
   creditRequest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "creditRequests",
-    required: [true, "Solicitação de crédito é um campo obrigatório."],
+    required: [true, "O campo 'Solicitação de crédito' é obrigatório."],
   },
   bank: {
     type: mongoose.Schema.Types.ObjectId,
@@ -12,31 +12,30 @@ const CreditOfferSchema = new mongoose.Schema({
   },
   offerDate: {
     type: Date,
-    required: [true, "Data da oferta é um campo obrigatório."],
+    required: [true, "O campo 'Data da oferta' é obrigatório."],
   },
   offeredAmount: {
     type: Number,
-    required: [true, "Valor oferecido é um campo obrigatório."],
+    required: [true, "O campo 'Valor oferecido' é obrigatório."],
   },
   interestRate: {
     type: Number,
-    required: [true, "Taxa de juros é um campo obrigatório."],
+    required: [true, "O campo 'Taxa de juros' é obrigatório."],
   },
   totalCost: {
     type: Number,
-    required: [true, "Custo total é um campo obrigatório."],
+    required: [true, "O campo 'Custo total' é obrigatório."],
   },
   expirationDate: {
     type: Date,
-    required: [true, "Data de expiração é um campo obrigatório."],
+    required: [true, "O campo 'Data de expiração' é obrigatório."],
   },
   status: {
     type: String,
-    required: [true, "Status da oferta é um campo obrigatório."],
+    required: [true, "O campo 'Status' é obrigatório."],
     enum: {
       values: ["PENDING", "ACCEPTED", "REJECTED", "EXPIRED"],
-      message:
-        "Status da oferta deve ser um dos seguintes valores: PENDING, ACCEPTED, REJECTED, EXPIRED.",
+      message: "O valor '{VALUE}' não é um status de oferta válido.",
     },
   },
 });

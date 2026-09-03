@@ -4,19 +4,19 @@ const BankModel = new mongoose.Schema(
   {
     bankCode: {
       type: String,
-      required: [true, "Código do banco é um campo obrigatório."],
+      required: [true, "O campo 'Código do banco' é obrigatório."],
     },
     legalName: {
       type: String,
-      required: [true, "Razão Social é um campo obrigatório."],
+      required: [true, "O campo 'Razão Social' é obrigatório."],
     },
     documentNumber: {
       type: String,
-      required: [true, "CNPJ é um campo obrigatório."],
+      required: [true, "O campo 'CNPJ' é obrigatório."],
     },
     customerServicePhone: {
       type: String,
-      required: [true, "Telefone para contato é um campo obrigatório."],
+      required: [true, "O campo 'Telefone de atendimento' é obrigatório."],
     },
   },
   { versionKey: false, timestamps: true },

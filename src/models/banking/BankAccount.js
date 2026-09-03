@@ -5,27 +5,30 @@ const BankAccountModel = new mongoose.Schema(
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "companies",
-      required: [true, "Empresa é um campo obrigatório."],
+      required: [true, "O campo 'Empresa' é obrigatório."],
     },
     bank: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "banks",
-      required: [true, "Instituição bancária é um campo obrigatório."],
+      required: [true, "O campo 'Instituição bancária' é obrigatório."],
     },
     agencyNumber: {
       type: String,
-      required: [true, "Número da agência é um campo obrigatório."],
+      required: [true, "O campo 'Número da agência' é obrigatório."],
       trim: true,
     },
     accountNumber: {
       type: String,
-      required: [true, "Número da conta é um campo obrigatório."],
+      required: [true, "O campo 'Número da conta' é obrigatório."],
       trim: true,
     },
     accountType: {
       type: String,
-      enum: ["CHECKING", "SAVINGS"],
-      required: [true, "Tipo de conta é um campo obrigatório."],
+      required: [true, "O campo 'Tipo de conta' é obrigatório."],
+      enum: {
+        values: ["CHECKING", "SAVINGS"],
+        message: "O valor '{VALUE}' não é um tipo de conta válido.",
+      },
     },
   },
   { versionKey: false, timestamps: true },

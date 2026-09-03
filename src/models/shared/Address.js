@@ -4,30 +4,30 @@ const AddressModel = new mongoose.Schema(
   {
     zipCode: {
       type: String,
-      required: [true, "CEP é um campo obrigatório."],
+      required: [true, "O campo 'CEP' é obrigatório."],
     },
     street: {
       type: String,
-      required: [true, "Rua é um campo obrigatório."],
+      required: [true, "O campo 'Rua' é obrigatório."],
     },
     number: {
       type: String,
-      required: [true, "Número é um campo obrigatório."],
+      required: [true, "O campo 'Número' é obrigatório."],
     },
     complement: {
       type: String,
     },
     neighborhood: {
       type: String,
-      required: [true, "Bairro é um campo obrigatório."],
+      required: [true, "O campo 'Bairro' é obrigatório."],
     },
     city: {
       type: String,
-      required: [true, "Cidade é um campo obrigatório."],
+      required: [true, "O campo 'Cidade' é obrigatório."],
     },
     state: {
       type: String,
-      required: [true, "Estado (UF) é um campo obrigatório."],
+      required: [true, "O campo 'Estado (UF)' é obrigatório."],
       uppercase: true,
       enum: {
         values: [
@@ -59,7 +59,7 @@ const AddressModel = new mongoose.Schema(
           "SE",
           "TO",
         ],
-        message: "{VALUE} não é um estado brasileiro válido.",
+        message: "O valor '{VALUE}' não é um estado brasileiro válido.",
       },
     },
   },

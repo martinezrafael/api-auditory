@@ -4,7 +4,7 @@ const CreditRequestModel = new mongoose.Schema({
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "companies",
-    required: [true, "Empresa é um campo obrigatório."],
+    required: [true, "O campo 'Empresa' é obrigatório."],
   },
   requestedBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -12,23 +12,23 @@ const CreditRequestModel = new mongoose.Schema({
   },
   requestDate: {
     type: Date,
-    required: [true, "Data da solicitação é um campo obrigatório."],
+    required: [true, "O campo 'Data da solicitação' é obrigatório."],
   },
   requestedAmount: {
     type: Number,
-    required: [true, "Valor solicitado é um campo obrigatório."],
+    required: [true, "O campo 'Valor solicitado' é obrigatório."],
   },
   requiredScore: {
     type: Number,
-    required: [true, "Pontuação necessária é um campo obrigatório."],
+    required: [true, "O campo 'Pontuação necessária' é obrigatório."],
   },
   installmentsLimit: {
     type: Number,
-    required: [true, "Limite de parcelas é um campo obrigatório."],
+    required: [true, "O campo 'Limite de parcelas' é obrigatório."],
   },
   status: {
     type: String,
-    required: [true, "Status da solicitação é um campo obrigatório."],
+    required: [true, "O campo 'Status' é obrigatório."],
     enum: {
       values: [
         "MISSING_DOCS",
@@ -39,8 +39,7 @@ const CreditRequestModel = new mongoose.Schema({
         "DENIED",
         "CANCELED",
       ],
-      message:
-        "Status da solicitação deve ser um dos seguintes valores: MISSING_DOCS, UNDER_REVIEW, OFFERS_AVAILABLE, APPROVED, RELEASED, DENIED, CANCELED.",
+      message: "O valor '{VALUE}' não é um status de solicitação válido.",
     },
   },
 });
