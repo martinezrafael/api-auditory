@@ -23,10 +23,10 @@ const routes = (app) => {
     bankAccountRoutes,
     bankTransactionRoutes,
     cardAcquirerRoutes,
+    creditOfferRoutes,
     cardTransactionRoutes,
     settlementRoutes,
     creditRequestRoutes,
-    creditOfferRoutes,
   );
 };
 
