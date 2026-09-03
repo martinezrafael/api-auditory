@@ -14,19 +14,27 @@ class BaseService {
     return await this.model.find(filter, projection, options);
   }
 
-  async getById(id) {
-    const document = await this.model.findById(id);
+  async getById(id, populate = null, projection = null) {
+    let query = this.model.findById(id, projection);
+
+    if (populate) {
+      query = query.populate(populate);
+    }
+
+    const document = await query;
+
     if (!document) {
       throw new NotFoundError("Recurso não localizado.");
     }
     return document;
   }
 
-  async update(id, data) {
+  async update(id, data, options = {}) {
+    const updateOptions = { new: true, runValidators: true, ...options };
     const document = await this.model.findByIdAndUpdate(
       id,
       { $set: data },
-      { new: true, runValidators: true },
+      updateOptions,
     );
 
     if (!document) {
