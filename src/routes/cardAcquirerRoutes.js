@@ -1,5 +1,5 @@
 import express from "express";
-import CardAcquirerController from "../controllers/cardAcquirerController.js";
+import CardAcquirerController from "../controllers/CardAcquirerController.js";
 
 const routes = express.Router();
 

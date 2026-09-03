@@ -1,5 +1,5 @@
 import express from "express";
-import CardTransactionController from "../controllers/cardTransactionController.js";
+import CardTransactionController from "../controllers/CardTransactionController.js";
 
 const routes = express.Router();
 

@@ -1,5 +1,5 @@
 import express from "express";
-import creditRequestController from "../controllers/creditRequestController.js";
+import creditRequestController from "../controllers/CreditRequestController.js";
 
 const router = express.Router();
 

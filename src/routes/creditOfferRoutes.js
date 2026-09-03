@@ -1,5 +1,5 @@
 import express from "express";
-import creditOfferController from "../controllers/creditOfferController.js";
+import creditOfferController from "../controllers/CreditOfferController.js";
 
 const router = express.Router();
 

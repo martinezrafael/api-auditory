@@ -1,5 +1,5 @@
 import express from "express";
-import AuditController from "../controllers/auditController.js";
+import AuditController from "../controllers/AuditController.js";
 
 const routes = express.Router();
 

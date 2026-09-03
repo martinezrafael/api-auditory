@@ -1,5 +1,5 @@
 import express from "express";
-import BankTransactionController from "../controllers/bankTransactionController.js";
+import BankTransactionController from "../controllers/BankTransactionController.js";
 
 const routes = express.Router();
 

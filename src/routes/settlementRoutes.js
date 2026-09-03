@@ -1,5 +1,5 @@
 import express from "express";
-import SettlementController from "../controllers/settlementController.js";
+import SettlementController from "../controllers/SettlementController.js";
 
 const routes = express.Router();
 
