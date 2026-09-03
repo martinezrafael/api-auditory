@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
 
 const CreditOfferSchema = new mongoose.Schema({
-  id: {
+  creditRequest: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "creditRequests",
+    required: [true, "Solicitação de crédito é um campo obrigatório."],
+  },
+  bank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "banks",
   },
   offerDate: {
     type: Date,

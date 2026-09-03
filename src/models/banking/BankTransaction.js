@@ -2,8 +2,15 @@ import mongoose from "mongoose";
 
 const BankTransactionModel = new mongoose.Schema(
   {
-    id: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      required: [true, "Empresa é um campo obrigatório."],
+    },
+    bankAccount: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "bankAccounts",
+      required: [true, "Conta bancária é um campo obrigatório."],
     },
     transactionDate: {
       type: Date,

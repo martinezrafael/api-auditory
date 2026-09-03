@@ -2,13 +2,15 @@ import mongoose from "mongoose";
 
 const BankAccountModel = new mongoose.Schema(
   {
-    id: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      required: [true, "Empresa é um campo obrigatório."],
     },
-    bankName: {
-      type: String,
-      required: [true, "Nome do banco é um campo obrigatório."],
-      trim: true,
+    bank: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "banks",
+      required: [true, "Instituição bancária é um campo obrigatório."],
     },
     agencyNumber: {
       type: String,

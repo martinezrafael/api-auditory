@@ -2,8 +2,14 @@ import mongoose from "mongoose";
 
 const AuditModel = new mongoose.Schema(
   {
-    id: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      required: [true, "Empresa é um campo obrigatório."],
+    },
+    auditor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
     },
     scheduleDate: {
       type: Date,

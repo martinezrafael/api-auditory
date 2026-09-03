@@ -3,9 +3,6 @@ import AddressModel from "../shared/Address.js";
 
 const CompanyModel = new mongoose.Schema(
   {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-    },
     legalName: {
       type: String,
       required: [true, "Razão Social é um campo obrigatório."],

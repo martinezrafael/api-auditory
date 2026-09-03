@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
 
 const CreditRequestModel = new mongoose.Schema({
-  id: {
+  company: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "companies",
+    required: [true, "Empresa é um campo obrigatório."],
+  },
+  requestedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
   },
   requestDate: {
     type: Date,

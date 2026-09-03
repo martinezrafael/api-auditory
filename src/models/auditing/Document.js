@@ -2,8 +2,15 @@ import mongoose from "mongoose";
 
 const DocumentModel = new mongoose.Schema(
   {
-    id: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      required: [true, "Empresa é um campo obrigatório"],
+    },
+    audit: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "audits",
+      default: null,
     },
     documentType: {
       type: String,

@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
 const CardAcquirerSchema = new mongoose.Schema({
-  id: {
+  company: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "companies",
+    required: [true, "Empresa é um campo obrigatório."],
   },
   acquirerName: {
     type: String,

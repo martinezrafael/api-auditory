@@ -2,9 +2,6 @@ import mongoose from "mongoose";
 
 const BankModel = new mongoose.Schema(
   {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-    },
     bankCode: {
       type: String,
       required: [true, "Código do banco é um campo obrigatório."],

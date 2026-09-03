@@ -2,8 +2,10 @@ import mongoose from "mongoose";
 
 const UserModel = new mongoose.Schema(
   {
-    id: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      required: [true, "Empresa é um campo obrigatório."],
     },
     fullName: {
       type: String,

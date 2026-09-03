@@ -2,8 +2,20 @@ import mongoose from "mongoose";
 
 const settlementSchema = new mongoose.Schema(
   {
-    id: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      required: [true, "Empresa é um campo obrigatório."],
+    },
+    acquirer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "cardAcquirers",
+      required: [true, "Adquirente é um campo obrigatório."],
+    },
+    bankAccount: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "bankAccounts",
+      default: null,
     },
     settlementDate: {
       type: Date,
