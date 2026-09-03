@@ -1,10 +1,13 @@
 import BaseService from "./BaseService.js";
-import SettlementModel from "../models/acquiring/Settlement.js";
+import settlementRepository from "../repositories/SettlementRepository.js";
 
 class SettlementService extends BaseService {
   constructor() {
-    super(SettlementModel);
+    super(settlementRepository, [
+      { path: "company", select: "legalName documentNumber" },
+      { path: "acquirer", select: "acquirerName merchantId" },
+      { path: "bankAccount", select: "agencyNumber accountNumber" },
+    ]);
   }
 }
-
 export default new SettlementService();

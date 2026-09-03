@@ -1,10 +1,12 @@
 import BaseService from "./BaseService.js";
-import creditRequestModel from "../models/credit/CreditRequest.js";
+import creditRequestRepository from "../repositories/CreditRequestRepository.js";
 
 class CreditRequestService extends BaseService {
   constructor() {
-    super(creditRequestModel);
+    super(creditRequestRepository, [
+      { path: "company", select: "legalName documentNumber creditScore" },
+      { path: "requestedBy", select: "fullName email role" },
+    ]);
   }
 }
-
 export default new CreditRequestService();

@@ -3,25 +3,10 @@ import CardTransactionController from "../controllers/cardTransactionController.
 
 const routes = express.Router();
 
-routes.post(
-  "/card-transactions",
-  CardTransactionController.createCardTransaction,
-);
-routes.get(
-  "/card-transactions",
-  CardTransactionController.getAllCardTransactions,
-);
-routes.get(
-  "/card-transactions/:id",
-  CardTransactionController.getCardTransactionById,
-);
-routes.put(
-  "/card-transactions/:id",
-  CardTransactionController.updateCardTransaction,
-);
-routes.delete(
-  "/card-transactions/:id",
-  CardTransactionController.deleteCardTransaction,
-);
+routes.post("/card-transactions", CardTransactionController.create);
+routes.get("/card-transactions", CardTransactionController.getAll);
+routes.get("/card-transactions/:id", CardTransactionController.getById);
+routes.put("/card-transactions/:id", CardTransactionController.update);
+routes.delete("/card-transactions/:id", CardTransactionController.delete);
 
 export default routes;

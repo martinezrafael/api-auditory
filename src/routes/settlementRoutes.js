@@ -3,10 +3,10 @@ import SettlementController from "../controllers/settlementController.js";
 
 const routes = express.Router();
 
-routes.post("/settlements", SettlementController.createSettlement);
-routes.get("/settlements", SettlementController.getAllSettlements);
-routes.get("/settlements/:id", SettlementController.getSettlementById);
-routes.put("/settlements/:id", SettlementController.updateSettlement);
-routes.delete("/settlements/:id", SettlementController.deleteSettlement);
+routes.post("/settlements", SettlementController.create);
+routes.get("/settlements", SettlementController.getAll);
+routes.get("/settlements/:id", SettlementController.getById);
+routes.put("/settlements/:id", SettlementController.update);
+routes.delete("/settlements/:id", SettlementController.delete);
 
 export default routes;

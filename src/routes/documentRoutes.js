@@ -3,10 +3,10 @@ import DocumentController from "../controllers/documentController.js";
 
 const routes = express.Router();
 
-routes.post("/documents", DocumentController.createDocument);
-routes.get("/documents", DocumentController.getAllDocuments);
-routes.get("/documents/:id", DocumentController.getDocumentById);
-routes.put("/documents/:id", DocumentController.updateDocument);
-routes.delete("/documents/:id", DocumentController.deleteDocument);
+routes.post("/documents", DocumentController.create);
+routes.get("/documents", DocumentController.getAll);
+routes.get("/documents/:id", DocumentController.getById);
+routes.put("/documents/:id", DocumentController.update);
+routes.delete("/documents/:id", DocumentController.delete);
 
 export default routes;

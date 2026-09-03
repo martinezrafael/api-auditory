@@ -1,42 +1,29 @@
 import NotFoundError from "../errors/NotFoundError.js";
 
 class BaseService {
-  constructor(model) {
-    this.model = model;
+  constructor(repository, defaultPopulate = null) {
+    this.repository = repository;
+    this.defaultPopulate = defaultPopulate;
   }
 
   async create(data) {
-    const document = new this.model(data);
-    return await document.save();
+    return await this.repository.create(data);
   }
 
-  async getAll(filter = {}, projection = null, options = {}) {
-    return await this.model.find(filter, projection, options);
+  async getAll(filter = {}) {
+    return await this.repository.findAll(filter, this.defaultPopulate);
   }
 
-  async getById(id, populate = null, projection = null) {
-    let query = this.model.findById(id, projection);
-
-    if (populate) {
-      query = query.populate(populate);
-    }
-
-    const document = await query;
-
+  async getById(id) {
+    const document = await this.repository.findById(id, this.defaultPopulate);
     if (!document) {
       throw new NotFoundError("Recurso não localizado.");
     }
     return document;
   }
 
-  async update(id, data, options = {}) {
-    const updateOptions = { new: true, runValidators: true, ...options };
-    const document = await this.model.findByIdAndUpdate(
-      id,
-      { $set: data },
-      updateOptions,
-    );
-
+  async update(id, data) {
+    const document = await this.repository.update(id, data);
     if (!document) {
       throw new NotFoundError("Recurso não localizado.");
     }
@@ -44,7 +31,7 @@ class BaseService {
   }
 
   async delete(id) {
-    const document = await this.model.findByIdAndDelete(id);
+    const document = await this.repository.delete(id);
     if (!document) {
       throw new NotFoundError("Recurso não localizado.");
     }

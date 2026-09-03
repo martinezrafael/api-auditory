@@ -1,10 +1,11 @@
 import BaseService from "./BaseService.js";
-import cardAcquirerModel from "../models/acquiring/CardAcquirer.js";
+import cardAcquirerRepository from "../repositories/CardAcquirerRepository.js";
 
 class CardAcquirerService extends BaseService {
   constructor() {
-    super(cardAcquirerModel);
+    super(cardAcquirerRepository, [
+      { path: "company", select: "legalName documentNumber" },
+    ]);
   }
 }
-
 export default new CardAcquirerService();

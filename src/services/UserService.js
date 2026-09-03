@@ -1,10 +1,11 @@
 import BaseService from "./BaseService.js";
-import UserModel from "../models/identity/User.js";
+import userRepository from "../repositories/UserRepository.js";
 
 class UserService extends BaseService {
   constructor() {
-    super(UserModel);
+    super(userRepository, [
+      { path: "company", select: "legalName documentNumber" },
+    ]);
   }
 }
-
 export default new UserService();

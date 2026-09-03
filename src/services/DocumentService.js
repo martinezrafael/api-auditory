@@ -1,10 +1,12 @@
 import BaseService from "./BaseService.js";
-import documentModel from "../models/auditing/Document.js";
+import documentRepository from "../repositories/DocumentRepository.js";
 
 class DocumentService extends BaseService {
   constructor() {
-    super(documentModel);
+    super(documentRepository, [
+      { path: "company", select: "legalName documentNumber" },
+      { path: "audit", select: "scheduleDate status" },
+    ]);
   }
 }
-
 export default new DocumentService();

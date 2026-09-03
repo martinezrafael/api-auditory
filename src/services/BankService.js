@@ -1,10 +1,9 @@
 import BaseService from "./BaseService.js";
-import bankModel from "../models/identity/Bank.js";
+import bankRepository from "../repositories/BankRepository.js";
 
 class BankService extends BaseService {
   constructor() {
-    super(bankModel);
+    super(bankRepository);
   }
 }
-
 export default new BankService();

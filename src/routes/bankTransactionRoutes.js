@@ -3,25 +3,10 @@ import BankTransactionController from "../controllers/bankTransactionController.
 
 const routes = express.Router();
 
-routes.post(
-  "/bank-transactions",
-  BankTransactionController.createBankTransaction,
-);
-routes.get(
-  "/bank-transactions",
-  BankTransactionController.getAllBankTransactions,
-);
-routes.get(
-  "/bank-transactions/:id",
-  BankTransactionController.getBankTransactionById,
-);
-routes.put(
-  "/bank-transactions/:id",
-  BankTransactionController.updateBankTransaction,
-);
-routes.delete(
-  "/bank-transactions/:id",
-  BankTransactionController.deleteBankTransaction,
-);
+routes.post("/bank-transactions", BankTransactionController.create);
+routes.get("/bank-transactions", BankTransactionController.getAll);
+routes.get("/bank-transactions/:id", BankTransactionController.getById);
+routes.put("/bank-transactions/:id", BankTransactionController.update);
+routes.delete("/bank-transactions/:id", BankTransactionController.delete);
 
 export default routes;
