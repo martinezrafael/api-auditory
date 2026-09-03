@@ -32,11 +32,6 @@ const AuditModel = new mongoose.Schema(
       },
       default: "PENDING",
     },
-    auditorName: {
-      type: String,
-      required: [true, "O campo 'Nome do auditor' é obrigatório."],
-      trim: true,
-    },
     notes: {
       type: String,
       trim: true,
