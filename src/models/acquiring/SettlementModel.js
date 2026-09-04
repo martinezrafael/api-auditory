@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const settlementSchema = new mongoose.Schema(
+const SettlementModel = new mongoose.Schema(
   {
     company: {
       type: mongoose.Schema.Types.ObjectId,
@@ -55,6 +55,6 @@ const settlementSchema = new mongoose.Schema(
   { versionKey: false, timestamps: true },
 );
 
-const settlementModel = mongoose.model("settlements", settlementSchema);
+const settlementModel = mongoose.model("settlements", SettlementModel);
 
 export default settlementModel;

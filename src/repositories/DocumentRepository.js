@@ -1,5 +1,5 @@
 import BaseRepository from "./BaseRepository.js";
-import documentModel from "../models/auditing/Document.js";
+import documentModel from "../models/auditing/DocumentModel.js";
 
 class DocumentRepository extends BaseRepository {
   constructor() {

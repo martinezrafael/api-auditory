@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const cardTransactionSchema = new mongoose.Schema(
+const CardTransactionModel = new mongoose.Schema(
   {
     company: {
       type: mongoose.Schema.Types.ObjectId,
@@ -94,7 +94,7 @@ const cardTransactionSchema = new mongoose.Schema(
 
 const cardTransactionModel = mongoose.model(
   "cardTransactions",
-  cardTransactionSchema,
+  CardTransactionModel,
 );
 
 export default cardTransactionModel;

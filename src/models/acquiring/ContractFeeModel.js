@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ContractFeeSchema = new mongoose.Schema(
+const ContractFeeModel = new mongoose.Schema(
   {
     company: {
       type: mongoose.Schema.Types.ObjectId,
@@ -36,6 +36,6 @@ const ContractFeeSchema = new mongoose.Schema(
   { versionKey: false, timestamps: true },
 );
 
-const contractFeeModel = mongoose.model("contractFees", ContractFeeSchema);
+const contractFeeModel = mongoose.model("contractFees", ContractFeeModel);
 
 export default contractFeeModel;

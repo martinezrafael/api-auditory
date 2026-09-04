@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const CardAcquirerSchema = new mongoose.Schema({
+const CardAcquirerModel = new mongoose.Schema({
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "companies",
@@ -23,6 +23,6 @@ const CardAcquirerSchema = new mongoose.Schema({
   },
 });
 
-const cardAcquirerModel = mongoose.model("cardAcquirers", CardAcquirerSchema);
+const cardAcquirerModel = mongoose.model("cardAcquirers", CardAcquirerModel);
 
 export default cardAcquirerModel;

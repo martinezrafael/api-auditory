@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const CreditOfferSchema = new mongoose.Schema({
+const CreditOfferModel = new mongoose.Schema({
   creditRequest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "creditRequests",
@@ -40,6 +40,6 @@ const CreditOfferSchema = new mongoose.Schema({
   },
 });
 
-const creditOfferModel = mongoose.model("creditOffers", CreditOfferSchema);
+const creditOfferModel = mongoose.model("creditOffers", CreditOfferModel);
 
 export default creditOfferModel;

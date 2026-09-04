@@ -1,5 +1,5 @@
 import BaseRepository from "./BaseRepository.js";
-import settlementModel from "../models/acquiring/Settlement.js";
+import settlementModel from "../models/acquiring/SettlementModel.js";
 
 class SettlementRepository extends BaseRepository {
   constructor() {
