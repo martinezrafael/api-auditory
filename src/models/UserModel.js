@@ -2,11 +2,13 @@ import mongoose from "mongoose";
 
 const UserModel = new mongoose.Schema(
   {
-    company: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "companies",
-      required: [true, "O campo 'Empresa' é obrigatório."],
-    },
+    // Lista das empresas que o usuário está vinculado
+    companies: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "companies",
+      },
+    ],
     fullName: {
       type: String,
       required: [true, "O campo 'Nome completo' é obrigatório."],

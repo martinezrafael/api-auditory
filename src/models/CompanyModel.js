@@ -3,6 +3,20 @@ import AddressModel from "./AddressModel.js";
 
 const CompanyModel = new mongoose.Schema(
   {
+    // Lista dos usuários vinculados a empresa que possuem a role 'BUSINESS_OWNER'
+    owners: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: [true, "O campo 'Usuário' é obrigatório."],
+      },
+    ],
+    // Usuário responsável pela criação/cadastro da empesa no sistema
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     legalName: {
       type: String,
       required: [true, "O campo 'Razão Social' é obrigatório."],
