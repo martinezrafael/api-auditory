@@ -15,6 +15,11 @@ const settlementSchema = new mongoose.Schema(
     bankAccount: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "bankAccounts",
+      required: [true, "O campo 'Conta bancária' é obrigatório."],
+    },
+    bankTransaction: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "bankTransactions",
       default: null,
     },
     settlementDate: {
@@ -29,12 +34,20 @@ const settlementSchema = new mongoose.Schema(
       type: Number,
       required: [true, "O campo 'Valor do repasse' é obrigatório."],
     },
+    expectedAmount: {
+      type: Number,
+      required: [true, "O campo 'Valor esperado' é obrigatório."],
+    },
+    discrepancyAmount: {
+      type: Number,
+      default: 0,
+    },
     status: {
       type: String,
       required: [true, "O campo 'Status' é obrigatório."],
       trim: true,
       enum: {
-        values: ["SCHEDULED", "PAID", "DISPUTED"],
+        values: ["SCHEDULED", "PAID", "DISPUTED", "DIVERGENT"],
         message: "O valor '{VALUE}' não é um status de repasse válido.",
       },
     },
