@@ -1,8 +1,9 @@
-// UserService.js
-
+import "dotenv/config";
 import BaseService from "./BaseService.js";
 import userRepository from "../repositories/UserRepository.js";
 import companyRepository from "../repositories/CompanyRepository.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class UserService extends BaseService {
   constructor() {
@@ -49,20 +50,26 @@ class UserService extends BaseService {
   }
 
   async create(userData) {
-    // 1. Cria o registro do novo usuário no banco de dados via serviço base
+    // 1. Criptografa a senha do usuário antes de salvar no banco
+    if (userData.password) {
+      const saltRounds = 10;
+      userData.password = await bcrypt.hash(userData.password, saltRounds);
+    }
+
+    // 2. Cria o registro do novo usuário no banco de dados via serviço base
     const newUser = await super.create(userData);
 
-    // 2. Se o usuário for 'BUSINESS_OWNER' e tiver uma empresa vinculada no cadastro
+    // 3. Se o usuário for 'BUSINESS_OWNER' e tiver uma empresa vinculada no cadastro
     if (newUser.company && newUser.role === "BUSINESS_OWNER") {
       const company = await companyRepository.findById(newUser.company);
 
       if (company) {
-        // 3. Verifica se o ID do novo usuário já consta na lista de owners da empresa
+        // Verifica se o ID do novo usuário já consta na lista de owners da empresa
         const alreadyOwner = company.owners.some(
           (owner) => owner.toString() === newUser._id.toString(),
         );
 
-        // 4. Adiciona o usuário como owner caso ele ainda não esteja presente e salva as alterações
+        // Adiciona o usuário como owner caso ele ainda não esteja presente e salva as alterações
         if (!alreadyOwner) {
           company.owners.push(newUser._id);
           await company.save();
@@ -70,8 +77,22 @@ class UserService extends BaseService {
       }
     }
 
-    // 5. Retorna o usuário recém-criado
-    return newUser;
+    // 4. Gera o token JWT para autenticação imediata pós-cadastro
+    const token = jwt.sign(
+      { id: newUser._id, role: newUser.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }, // Token válido por 1 dia
+    );
+
+    // 5. Converte para objeto simples e remove a senha do retorno por segurança
+    const userResponse = newUser.toObject ? newUser.toObject() : { ...newUser };
+    delete userResponse.password;
+
+    // 6. Retorna o usuário tratado junto com o token
+    return {
+      user: userResponse,
+      token,
+    };
   }
 
   async findCreatedCompanies(userId) {
