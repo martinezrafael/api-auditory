@@ -1,5 +1,5 @@
 import BaseRepository from "./BaseRepository.js";
-import creditOfferModel from "../models/credit/CreditOfferModel.js";
+import creditOfferModel from "../models/CreditOfferModel.js";
 
 class CreditOfferRepository extends BaseRepository {
   constructor() {

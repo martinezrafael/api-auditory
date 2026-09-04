@@ -1,5 +1,5 @@
 import BaseRepository from "./BaseRepository.js";
-import cardTransactionModel from "../models/acquiring/CardTransactionModel.js";
+import cardTransactionModel from "../models/CardTransactionModel.js";
 
 class CardTransactionRepository extends BaseRepository {
   constructor() {
