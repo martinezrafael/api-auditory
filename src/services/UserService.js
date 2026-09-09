@@ -1,48 +1,44 @@
+// CONFIGURAÇÕES
 import "dotenv/config";
-import BaseService from "./BaseService.js";
-import userRepository from "../repositories/UserRepository.js";
-import companyRepository from "../repositories/CompanyRepository.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
+// SERVICES
+import BaseService from "./BaseService.js";
+
+// REPOSITORIES
+import userRepository from "../repositories/UserRepository.js";
+import companyRepository from "../repositories/CompanyRepository.js";
+
+//MIDDLEWARES
+import { authorize } from "./authGuard.js";
 
 class UserService extends BaseService {
   constructor() {
     super(userRepository, [
+      // PARA AS EMPRESAS POPULADAS NO PERFIL DO USUÁRIO, VAMOS EXIBIR `legalName` e `documentNumber`
       { path: "companies", select: "legalName documentNumber" },
     ]);
   }
 
-  // ADMIN
-  async adminCreateUser(userData, creatorId) {
-    // 1. VALIDA SE QUEM ESTÁ REALIZANDO O CADASTRO É UM ADMIN E ESTÁ ATIVO NA PLATAFORMA
-    if (!creatorId) {
-      throw new Error("ID do usuário criador não foi fornecido.");
-    }
+  // MÉTODO PARA CRIAÇÃO DE UM NOVO USUÁRIO POR UM PERFIL 'ADMIN'
+  async adminCreateUser(userData, creator) {
+    // 1. Autorização — regra única, reutilizável em qualquer outro método
+    authorize(creator, "MANAGE_USERS");
 
-    const creator = await userRepository.findById(creatorId);
-
-    // SE NÃO FOR FORNECIDO O ID DO USUÁRIO QUE ESTÁ CRIANDO O NOVO USUÁRIO
-    // SE O ROLE DO USUÁRIO QUE ESTÁ CRIANDO FOR DIFERENTE DE ADMIN
-    // SE O USUÁRIO QUE ESTIVER CRIANDO NÃO ESTIVER ATIVO NA PLATAFORMA
-    if (!creator || creator.role !== "ADMIN" || !creator.isActive) {
-      throw new Error(
-        "Acesso negado: Apenas administradores ativos na plataforma podem criar novos usuários por este fluxo.",
-      );
-    }
-
-    // 2. CRIPTOGRAFIA DA SENHA ANTES DE SALVAR NO BANCO
+    // 2. Criptografia da senha antes de salvar no banco
     if (userData.password) {
       const saltRounds = 10;
       userData.password = await bcrypt.hash(userData.password, saltRounds);
     }
 
-    // 3. CRIA O REGISTRO DO NOVO USUÁRIO VIA 'BaseService'
+    // 3. Cria o registro do novo usuário via BaseService
     const newUser = await super.create(userData);
 
-    // 4. GARANTE QUE 'companies' SEJA TRATADO COMO UMA LISTA (ARRAY)
+    // 4. Garante que 'companies' seja tratado como uma lista (array)
     const companyIds = userData.companies || newUser.companies || [];
 
-    // SE O NOVO USUÁRIO FOR 'BUSINESS_OWNER' E TIVER EMPRESA ASSOCIADAS, VINCULA-O COMO OWNER DELAS
+    // Se o novo usuário for BUSINESS_OWNER e tiver empresas associadas, vincula-o como owner delas
     if (newUser.role === "BUSINESS_OWNER" && companyIds.length > 0) {
       for (const companyId of companyIds) {
         const company = await companyRepository.findById(companyId);
@@ -60,11 +56,11 @@ class UserService extends BaseService {
       }
     }
 
-    // 5. CONVERTE O DOCUMENTO PARA OBJETO E REMOVE A SENHA DO RETORNO POR SEGURANÇA
+    // 5. Converte o documento para objeto e remove a senha do retorno por segurança
     const userResponse = newUser.toObject ? newUser.toObject() : { ...newUser };
     delete userResponse.password;
 
-    // 6. RETORNA APENAS OS DADOS DO USUÁRIO CRIADO
+    // 6. Retorna apenas os dados do usuário criado
     return userResponse;
   }
 

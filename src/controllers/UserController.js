@@ -12,30 +12,12 @@ class UserController extends BaseController {
   /**
    * ENDPOINT EXCLUSIVO PARA A CRIAÇÃO DE NOVOS USUÁRIO VIA PERFIL ADMIN
    */
-
   async adminCreate(req, res, next) {
     try {
-      // LÊ O ID DO ADMIN A PARTIR DE UM HEADER
-      const adminId = req.headers["x-admin-id"];
-
-      // PAYLOAD COM OS DADOS DO NONO USUÁROP
-      const payload = req.body;
-
-      const newUser = await userService.adminCreateUser(payload, adminId);
-
-      return res.status(201).json({
-        message: "Usuário criado com sucesso pelo Administrador.",
-        data: newUser,
-      });
-    } catch (error) {
-      // SE A VALIDAÇÃO FALHAR (EX: NÃO FOR ADMIN), RETORNA 403 FORBIDDEN
-      if (
-        error.message.includes("Acesso negado") ||
-        error.message.includes("criador")
-      ) {
-        return res.status(403).json({ message: error.message });
-      }
-      next(error);
+      const newUser = await userService.adminCreateUser(req.body, req.user);
+      return res.status(201).json(newUser);
+    } catch (err) {
+      next(err);
     }
   }
 }
