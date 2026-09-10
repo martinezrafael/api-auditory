@@ -15,7 +15,7 @@ function can(user, action, context = {}) {
   // ARMAZENA A CHAVE DE PERMISSÃO
   const rule = PERMISSIONS[action];
 
-  // VERIFICA SE HÁ UMA CHAVE DE PERMISSÃO
+  // VERIFICA SE FOI FORNECIDA UMA CHAVE DE PERMISSÃO
   if (!rule) {
     throw new Error(`Ação de permissão desconhecida: '${action}'.`);
   }
