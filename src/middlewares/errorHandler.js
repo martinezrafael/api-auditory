@@ -1,18 +1,8 @@
 import mongoose from "mongoose";
 import NotFoundError from "../errors/NotFoundError.js";
-import ForbiddenError from "../errors/ForbiddenError.js";
-import UnauthorizedError from "../errors/UnauthorizedError.js";
 
 function errorHandler(error, req, res, next) {
   if (error instanceof NotFoundError) {
-    return res.status(error.status).json({ message: error.message });
-  }
-
-  if (error instanceof ForbiddenError) {
-    return res.status(error.status).json({ message: error.message });
-  }
-
-  if (error instanceof UnauthorizedError) {
     return res.status(error.status).json({ message: error.message });
   }
 
