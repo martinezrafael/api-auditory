@@ -3,10 +3,7 @@ import auditRepository from "../repositories/AuditRepository.js";
 
 class AuditService extends BaseService {
   constructor() {
-    super(auditRepository, [
-      { path: "company", select: "legalName documentNumber" },
-      { path: "auditor", select: "fullName email role" },
-    ]);
+    super(auditRepository);
   }
 }
 export default new AuditService();

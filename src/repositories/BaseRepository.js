@@ -32,10 +32,6 @@ class BaseRepository {
   async delete(id) {
     return await this.model.findByIdAndDelete(id);
   }
-
-  async exists(filter) {
-    return await this.model.exists(filter);
-  }
 }
 
 export default BaseRepository;

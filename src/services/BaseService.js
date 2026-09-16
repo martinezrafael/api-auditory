@@ -3,7 +3,6 @@ import NotFoundError from "../errors/NotFoundError.js";
 class BaseService {
   constructor(repository, defaultPopulate = null) {
     this.repository = repository;
-    this.defaultPopulate = defaultPopulate;
   }
 
   async create(data) {
@@ -11,11 +10,11 @@ class BaseService {
   }
 
   async getAll(filter = {}) {
-    return await this.repository.findAll(filter, this.defaultPopulate);
+    return await this.repository.findAll(filter);
   }
 
   async getById(id) {
-    const document = await this.repository.findById(id, this.defaultPopulate);
+    const document = await this.repository.findById(id);
     if (!document) {
       throw new NotFoundError("Recurso não localizado.");
     }

@@ -3,11 +3,7 @@ import settlementRepository from "../repositories/SettlementRepository.js";
 
 class SettlementService extends BaseService {
   constructor() {
-    super(settlementRepository, [
-      { path: "company", select: "legalName documentNumber" },
-      { path: "acquirer", select: "acquirerName merchantId" },
-      { path: "bankAccount", select: "agencyNumber accountNumber" },
-    ]);
+    super(settlementRepository);
   }
 }
 export default new SettlementService();

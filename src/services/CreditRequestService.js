@@ -3,10 +3,7 @@ import creditRequestRepository from "../repositories/CreditRequestRepository.js"
 
 class CreditRequestService extends BaseService {
   constructor() {
-    super(creditRequestRepository, [
-      { path: "company", select: "legalName documentNumber creditScore" },
-      { path: "requestedBy", select: "fullName email role" },
-    ]);
+    super(creditRequestRepository);
   }
 }
 export default new CreditRequestService();

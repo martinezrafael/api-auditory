@@ -3,10 +3,7 @@ import bankTransactionRepository from "../repositories/BankTransactionRepository
 
 class BankTransactionService extends BaseService {
   constructor() {
-    super(bankTransactionRepository, [
-      { path: "company", select: "legalName documentNumber" },
-      { path: "bankAccount", select: "agencyNumber accountNumber accountType" },
-    ]);
+    super(bankTransactionRepository);
   }
 }
 export default new BankTransactionService();

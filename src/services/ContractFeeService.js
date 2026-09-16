@@ -3,11 +3,7 @@ import contractFeeRepository from "../repositories/ContractFeeRepository.js";
 
 class ContractFeeService extends BaseService {
   constructor() {
-    const defaultPopulate = [
-      { path: "company", select: "legalName tradeName documentNumber" },
-      { path: "acquirer", select: "acquirerName documentNumber merchantId" },
-    ];
-    super(contractFeeRepository, defaultPopulate);
+    super(contractFeeRepository);
   }
 }
 

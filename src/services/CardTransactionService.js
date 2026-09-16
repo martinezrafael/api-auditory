@@ -3,11 +3,7 @@ import cardTransactionRepository from "../repositories/CardTransactionRepository
 
 class CardTransactionService extends BaseService {
   constructor() {
-    super(cardTransactionRepository, [
-      { path: "company", select: "legalName documentNumber" },
-      { path: "acquirer", select: "acquirerName merchantId" },
-      { path: "settlement", select: "settlementDate settlementAmount status" },
-    ]);
+    super(cardTransactionRepository);
   }
 }
 export default new CardTransactionService();
