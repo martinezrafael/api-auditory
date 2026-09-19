@@ -3,7 +3,7 @@ import cardTransactionService from "../services/CardTransactionService.js";
 
 class CardTransactionController extends BaseController {
   constructor() {
-    super(cardTransactionService, "Venda no Cartão");
+    super(cardTransactionService);
   }
 }
 export default new CardTransactionController();

@@ -3,7 +3,7 @@ import cardAcquirerService from "../services/CardAcquirerService.js";
 
 class CardAcquirerController extends BaseController {
   constructor() {
-    super(cardAcquirerService, "Adquirente de Cartão");
+    super(cardAcquirerService);
   }
 }
 export default new CardAcquirerController();

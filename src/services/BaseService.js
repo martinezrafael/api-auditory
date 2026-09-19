@@ -1,7 +1,7 @@
 import NotFoundError from "../errors/NotFoundError.js";
 
 class BaseService {
-  constructor(repository, defaultPopulate = null) {
+  constructor(repository) {
     this.repository = repository;
   }
 
@@ -9,32 +9,20 @@ class BaseService {
     return await this.repository.create(data);
   }
 
-  async getAll(filter = {}) {
-    return await this.repository.findAll(filter);
+  async getAll() {
+    return await this.repository.findAll();
   }
 
   async getById(id) {
-    const document = await this.repository.findById(id);
-    if (!document) {
-      throw new NotFoundError("Recurso não localizado.");
-    }
-    return document;
+    return await this.repository.findById(id);
   }
 
   async update(id, data) {
-    const document = await this.repository.update(id, data);
-    if (!document) {
-      throw new NotFoundError("Recurso não localizado.");
-    }
-    return document;
+    return await this.repository.update(id, data);
   }
 
   async delete(id) {
-    const document = await this.repository.delete(id);
-    if (!document) {
-      throw new NotFoundError("Recurso não localizado.");
-    }
-    return document;
+    return await this.repository.delete(id);
   }
 }
 

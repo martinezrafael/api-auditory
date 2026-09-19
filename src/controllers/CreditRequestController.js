@@ -3,7 +3,7 @@ import creditRequestService from "../services/CreditRequestService.js";
 
 class CreditRequestController extends BaseController {
   constructor() {
-    super(creditRequestService, "Solicitação de Crédito");
+    super(creditRequestService);
   }
 }
 export default new CreditRequestController();

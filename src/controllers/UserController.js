@@ -3,7 +3,7 @@ import userService from "../services/UserService.js";
 
 class UserController extends BaseController {
   constructor() {
-    super(userService, "Usuário");
+    super(userService);
   }
 }
 

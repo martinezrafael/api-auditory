@@ -3,7 +3,7 @@ import bankAccountService from "../services/BankAccountService.js";
 
 class BankAccountController extends BaseController {
   constructor() {
-    super(bankAccountService, "Conta Bancária");
+    super(bankAccountService);
   }
 }
 export default new BankAccountController();

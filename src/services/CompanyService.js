@@ -1,6 +1,5 @@
 import BaseService from "./BaseService.js";
-import companyRepository from "../repositories/CompanyRepository.js";
-import userRepository from "../repositories/UserRepository.js";
+import companyRepository from "../database/repositories/CompanyRepository.js";
 
 class CompanyService extends BaseService {
   constructor() {

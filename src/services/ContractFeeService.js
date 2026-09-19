@@ -1,5 +1,5 @@
 import BaseService from "./BaseService.js";
-import contractFeeRepository from "../repositories/ContractFeeRepository.js";
+import contractFeeRepository from "../database/repositories/ContractFeeRepository.js";
 
 class ContractFeeService extends BaseService {
   constructor() {

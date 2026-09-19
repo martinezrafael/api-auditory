@@ -1,14 +1,13 @@
 class BaseController {
-  constructor(service, entityName = "Recurso") {
+  constructor(service) {
     this.service = service;
-    this.entityName = entityName;
   }
 
   create = async (req, res, next) => {
     try {
       const created = await this.service.create(req.body);
       return res.status(201).json({
-        message: `${this.entityName} cadastrado(a) com sucesso.`,
+        message: `Cadastrado(a) com sucesso.`,
         data: created,
       });
     } catch (error) {
@@ -38,7 +37,7 @@ class BaseController {
     try {
       const updated = await this.service.update(req.params.id, req.body);
       return res.status(200).json({
-        message: `${this.entityName} atualizado(a) com sucesso.`,
+        message: `Atualizado(a) com sucesso.`,
         data: updated,
       });
     } catch (error) {
@@ -50,7 +49,7 @@ class BaseController {
     try {
       await this.service.delete(req.params.id);
       return res.status(200).json({
-        message: `${this.entityName} removido(a) com sucesso.`,
+        message: `Removido(a) com sucesso.`,
       });
     } catch (error) {
       next(error);

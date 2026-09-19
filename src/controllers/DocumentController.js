@@ -3,7 +3,7 @@ import documentService from "../services/DocumentService.js";
 
 class DocumentController extends BaseController {
   constructor() {
-    super(documentService, "Documento");
+    super(documentService);
   }
 }
 export default new DocumentController();

@@ -1,5 +1,5 @@
 import BaseService from "./BaseService.js";
-import creditOfferRepository from "../repositories/CreditOfferRepository.js";
+import creditOfferRepository from "../database/repositories/CreditOfferRepository.js";
 
 class CreditOfferService extends BaseService {
   constructor() {

@@ -3,7 +3,7 @@ import creditOfferService from "../services/CreditOfferService.js";
 
 class CreditOfferController extends BaseController {
   constructor() {
-    super(creditOfferService, "Proposta de Crédito");
+    super(creditOfferService);
   }
 }
 export default new CreditOfferController();

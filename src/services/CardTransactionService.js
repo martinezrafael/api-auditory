@@ -1,5 +1,5 @@
 import BaseService from "./BaseService.js";
-import cardTransactionRepository from "../repositories/CardTransactionRepository.js";
+import cardTransactionRepository from "../database/repositories/CardTransactionRepository.js";
 
 class CardTransactionService extends BaseService {
   constructor() {

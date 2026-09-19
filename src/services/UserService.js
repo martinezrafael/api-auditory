@@ -1,5 +1,5 @@
 import BaseService from "./BaseService.js";
-import userRepository from "../repositories/UserRepository.js";
+import userRepository from "../database/repositories/UserRepository.js";
 
 class UserService extends BaseService {
   constructor() {

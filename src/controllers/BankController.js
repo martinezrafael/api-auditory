@@ -3,7 +3,7 @@ import bankService from "../services/BankService.js";
 
 class BankController extends BaseController {
   constructor() {
-    super(bankService, "Instituição Bancária");
+    super(bankService);
   }
 }
 export default new BankController();

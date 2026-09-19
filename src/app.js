@@ -1,5 +1,5 @@
 import express from "express";
-import connectToDatabase from "./config/database.js";
+import connectToDatabase from "./database/config/database.js";
 import chalk from "chalk";
 
 import routes from "./routes/index.js";

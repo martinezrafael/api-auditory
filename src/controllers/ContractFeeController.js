@@ -3,7 +3,7 @@ import contractFeeService from "../services/ContractFeeService.js";
 
 class ContractFeeController extends BaseController {
   constructor() {
-    super(contractFeeService, "Taxa contratual");
+    super(contractFeeService);
   }
 }
 

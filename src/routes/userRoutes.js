@@ -8,5 +8,6 @@ routes.get("/users", UserController.getAll);
 routes.get("/users/:id", UserController.getById);
 routes.put("/users/:id", UserController.update);
 routes.delete("/users/:id", UserController.delete);
+console.log(">>> [DEBUG] userRoutes.js foi carregado!");
 
 export default routes;

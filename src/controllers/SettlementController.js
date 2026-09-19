@@ -3,7 +3,7 @@ import settlementService from "../services/SettlementService.js";
 
 class SettlementController extends BaseController {
   constructor() {
-    super(settlementService, "Liquidação / Repasse");
+    super(settlementService);
   }
 }
 export default new SettlementController();

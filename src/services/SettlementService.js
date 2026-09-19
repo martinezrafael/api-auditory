@@ -1,5 +1,5 @@
 import BaseService from "./BaseService.js";
-import settlementRepository from "../repositories/SettlementRepository.js";
+import settlementRepository from "../database/repositories/SettlementRepository.js";
 
 class SettlementService extends BaseService {
   constructor() {
