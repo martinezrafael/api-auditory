@@ -1,10 +1,12 @@
-import express from "express";
-import connectToDatabase from "./database/config/database.js";
+// color terminal
 import chalk from "chalk";
 
-import routes from "./routes/index.js";
-import errorHandler from "./middlewares/errorHandler.js";
+// server
+import express from "express";
+const app = express();
 
+// database
+import connectToDatabase from "./database/config/database.js";
 const database = await connectToDatabase();
 
 database.on("error", (error) => {
@@ -17,10 +19,12 @@ database.once("open", () => {
   );
 });
 
-const app = express();
-
+/// routes
+import routes from "./routes/index.js";
 routes(app);
 
+// error middleware
+import errorHandler from "./middlewares/errorHandler.js";
 app.use(errorHandler);
 
 export default app;

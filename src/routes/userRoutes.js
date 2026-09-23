@@ -3,11 +3,19 @@ import UserController from "../controllers/UserController.js";
 
 const routes = express.Router();
 
+// create a user
 routes.post("/users", UserController.create);
+
+// get all users
 routes.get("/users", UserController.getAll);
+
+// get user by id
 routes.get("/users/:id", UserController.getById);
+
+// update a user
 routes.put("/users/:id", UserController.update);
+
+// delete a user
 routes.delete("/users/:id", UserController.delete);
-console.log(">>> [DEBUG] userRoutes.js foi carregado!");
 
 export default routes;
