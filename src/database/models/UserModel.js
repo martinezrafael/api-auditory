@@ -86,6 +86,28 @@ const UserModel = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    /**
+     * Flag indicadora de exclusão lógica (Soft Delete).
+     * Omitido por padrão das consultas (`select: false`).
+     * @type {boolean}
+     * @default false
+     */
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      select: false,
+    },
+
+    /**
+     * Timestamp da realização do Soft Delete.
+     * @type {Date|null}
+     * @default null
+     */
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     /** Desabilita o campo de versionamento do Mongoose (`__v`). */

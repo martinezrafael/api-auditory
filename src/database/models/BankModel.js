@@ -9,6 +9,8 @@ import mongoose from "mongoose";
  * @property {string} legalName - Razão social ou nome oficial da instituição bancária.
  * @property {string} documentNumber - Número do CNPJ do banco.
  * @property {string} customerServicePhone - Telefone da central de atendimento / SAC.
+ * @property {boolean} [isDeleted=false] - Indica se o registro foi excluído logicamente (Soft Delete).
+ * @property {Date|null} [deletedAt=null] - Data e hora em que a exclusão lógica foi realizada.
  * @property {Date} createdAt - Data e hora de criação do registro (gerado automaticamente).
  * @property {Date} updatedAt - Data e hora da última atualização (gerado automaticamente).
  */
@@ -48,6 +50,28 @@ const BankModel = new mongoose.Schema(
     customerServicePhone: {
       type: String,
       required: [true, "O campo 'Telefone de atendimento' é obrigatório."],
+    },
+
+    /**
+     * Flag indicadora de exclusão lógica (Soft Delete).
+     * Omitido por padrão das consultas (`select: false`).
+     * @type {boolean}
+     * @default false
+     */
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      select: false,
+    },
+
+    /**
+     * Timestamp da realização do Soft Delete.
+     * @type {Date|null}
+     * @default null
+     */
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   {

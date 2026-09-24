@@ -29,8 +29,9 @@ class UserService extends BaseService {
   async create(data) {
     const { email, password } = data;
 
-    const existing = await this.repository.findByEmail(email);
-    if (existing) {
+    const emailExisting = await this.repository.findByEmail(email);
+
+    if (emailExisting) {
       const error = new Error("Este e-mail já está em uso no sistema.");
       error.statusCode = 400;
       throw error;
@@ -39,12 +40,12 @@ class UserService extends BaseService {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const preparedUserData = {
+    const userData = {
       ...data,
       password: hashedPassword,
     };
 
-    const user = await super.create(preparedUserData);
+    const user = await super.create(userData);
 
     const userObject = user.toObject ? user.toObject() : user;
     delete userObject.password;

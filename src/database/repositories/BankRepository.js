@@ -16,12 +16,27 @@ class BankRepository extends BaseRepository {
     super(bankModel);
   }
 
+  /**
+   * Busca um banco ativo (não marcado com soft delete) pelo número do CNPJ.
+   *
+   * @param {string} cnpj - Número do CNPJ a ser consultado (`documentNumber`).
+   * @returns {Promise<import("mongoose").Document|null>} O documento do banco localizado ou null.
+   */
   async findByCnpj(cnpj) {
-    return this.model.findOne({ documentNumber: cnpj });
+    return this.model.findOne({
+      documentNumber: cnpj,
+      isDeleted: { $ne: true },
+    });
   }
 
+  /**
+   * Busca um banco ativo (não marcado com soft delete) pelo código bancário.
+   *
+   * @param {string} bankCode - Código COMPE/ISPB do banco.
+   * @returns {Promise<import("mongoose").Document|null>} O documento do banco localizado ou null.
+   */
   async findByBankCode(bankCode) {
-    return this.model.findOne({ bankCode: bankCode });
+    return this.model.findOne({ bankCode: bankCode, isDeleted: { $ne: true } });
   }
 }
 
