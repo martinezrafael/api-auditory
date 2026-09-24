@@ -1,49 +1,68 @@
+/**
+ * Classe base genérica para a camada de serviço (Service Layer).
+ * Contém a lógica de negócio genérica e intermediante entre os Controllers e os Repositórios.
+ *
+ * @class BaseService
+ */
 class BaseService {
-  // O construtor recebe uma instância do repositório e a armazena na propriedade this.repository
+  /**
+   * Instancia a classe de serviço injetando o repositório correspondente.
+   *
+   * @param {Object} repository - Instância do repositório responsável pelas operações de banco de dados.
+   */
   constructor(repository) {
+    /**
+     * Instância do repositório injetado.
+     * @type {Object}
+     */
     this.repository = repository;
   }
 
   /**
-   * O método create recebe o parâmetro data com os dados a serem criados,
-   * repassa esses dados chamando o método .create(data) de this.repository
-   * e retorna a promessa com o novo registro criado.
+   * Executa a criação de um novo registro repassando os dados ao repositório.
+   *
+   * @param {Object} data - Dados para a criação do registro.
+   * @returns {Promise<Object>} Promessa contendo o objeto criado.
    */
   async create(data) {
     return this.repository.create(data);
   }
 
   /**
-   * O método getAll não recebe parâmetros,
-   * chama o método .findAll() de this.repository
-   * e retorna a lista com todos os registros encontrados.
+   * Obtém todos os registros cadastrados no repositório.
+   *
+   * @returns {Promise<Array<Object>>} Promessa contendo a lista de todos os registros.
    */
   async getAll() {
     return this.repository.findAll();
   }
 
   /**
-   * O método getById recebe o ID do registro como parâmetro,
-   * chama o método .findById(id) de this.repository
-   * e retorna o registro correspondente ao ID informado.
+   * Busca um registro específico no repositório através do seu ID.
+   *
+   * @param {string} id - Identificador único do registro.
+   * @returns {Promise<Object|null>} Promessa contendo o registro encontrado ou null.
    */
   async getById(id) {
     return this.repository.findById(id);
   }
 
   /**
-   * O método update recebe o ID e o parâmetro data com os novos dados,
-   * chama o método .update(id, data) de this.repository
-   * e retorna o registro atualizado.
+   * Atualiza os dados de um registro existente através do seu ID.
+   *
+   * @param {string} id - Identificador único do registro a ser atualizado.
+   * @param {Object} data - Objeto contendo as novas informações a serem aplicadas.
+   * @returns {Promise<Object|null>} Promessa contendo o registro já atualizado.
    */
   async update(id, data) {
     return this.repository.update(id, data);
   }
 
   /**
-   * O método delete recebe o ID do registro a ser removido,
-   * chama o método .delete(id) de this.repository
-   * e retorna o registro que foi excluído.
+   * Remove um registro do banco de dados através do seu ID.
+   *
+   * @param {string} id - Identificador único do registro a ser excluído.
+   * @returns {Promise<Object|null>} Promessa contendo o registro que foi removido.
    */
   async delete(id) {
     return this.repository.delete(id);
