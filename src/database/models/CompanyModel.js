@@ -122,14 +122,12 @@ const CompanyModel = new mongoose.Schema(
 
     /**
      * Flag indicadora de exclusão lógica (Soft Delete).
-     * Omitido por padrão das consultas (`select: false`).
      * @type {boolean}
      * @default false
      */
     isDeleted: {
       type: Boolean,
       default: false,
-      select: false,
     },
 
     /**

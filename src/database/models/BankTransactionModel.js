@@ -82,6 +82,26 @@ const BankTransactionModel = new mongoose.Schema(
       type: String,
       required: [true, "O campo 'Descrição' é obrigatório."],
     },
+
+    /**
+     * Flag indicadora de exclusão lógica (Soft Delete).
+     * @type {boolean}
+     * @default false
+     */
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * Timestamp da realização do Soft Delete.
+     * @type {Date|null}
+     * @default null
+     */
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     /** Desabilita o campo de versionamento do Mongoose (`__v`). */

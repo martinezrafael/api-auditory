@@ -62,6 +62,26 @@ const FeeRuleSchema = new mongoose.Schema(
       required: [true, "O campo 'Taxa contratual (%)' é obrigatório."],
       min: [0, "A taxa percentual não pode ser negativa."],
     },
+
+    /**
+     * Flag indicadora de exclusão lógica (Soft Delete).
+     * @type {boolean}
+     * @default false
+     */
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * Timestamp da realização do Soft Delete.
+     * @type {Date|null}
+     * @default null
+     */
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   { _id: true },
 );
