@@ -1,13 +1,26 @@
 import BaseRepository from "./BaseRepository.js";
 import contractFeeModel from "../models/ContractFeeModel.js";
 
+/**
+ * Repositório responsável por manipular as operações de banco de dados da entidade Contrato de Taxas (`ContractFee`).
+ * Herda os métodos genéricos de acesso a dados da classe `BaseRepository`.
+ *
+ * @class ContractFeeRepository
+ * @extends {BaseRepository}
+ */
 class ContractFeeRepository extends BaseRepository {
+  /**
+   * Instancia o `ContractFeeRepository` repassando o modelo de dados de contrato de taxas (`contractFeeModel`) para a classe base.
+   */
   constructor() {
     super(contractFeeModel);
   }
 
   /**
-   * Sobrescreve o método de busca geral respeitando o soft delete e populando as referências.
+   * Sobrescreve o método de busca geral para retornar todos os contratos ativos (sem soft delete),
+   * populando as informações resumidas da empresa e da adquirente associadas.
+   *
+   * @returns {Promise<Array<import("mongoose").Document>>} Lista de contratos com dados de empresa e adquirente populados.
    */
   async findAll() {
     return this.model
@@ -17,7 +30,18 @@ class ContractFeeRepository extends BaseRepository {
   }
 
   /**
-   * Localiza o contrato ativo e filtra com $elemMatch a regra de taxa correspondente.
+   * Localiza um contrato de taxas ativo e retorna especificamente a regra de taxa aplicável
+   * com base nas condições da transação (empresa, adquirente, merchantId, método de pagamento e quantidade de parcelas).
+   *
+   * Utiliza a projeção `fees.$` para retornar apenas o subdocumento de taxa correspondente.
+   *
+   * @param {Object} params - Parâmetros para localização da taxa aplicável.
+   * @param {string|import("mongoose").Types.ObjectId} params.companyId - ID da empresa.
+   * @param {string|import("mongoose").Types.ObjectId} params.acquirerId - ID da adquirente.
+   * @param {string} [params.merchantId] - Código do estabelecimento (Merchant ID) na adquirente.
+   * @param {"CREDIT"|"DEBIT"|"VOUCHER"} params.paymentMethod - Método de pagamento da transação.
+   * @param {number} [params.installmentsCount=1] - Quantidade de parcelas da transação.
+   * @returns {Promise<import("mongoose").Document|null>} Contrato contendo apenas a regra de taxa correspondente em `fees[0]`, ou `null` caso nenhuma taxa atenda aos critérios.
    */
   async findApplicableFee({
     companyId,
@@ -54,7 +78,15 @@ class ContractFeeRepository extends BaseRepository {
   }
 
   /**
-   * Adiciona uma nova regra de taxa ao array de um contrato existente.
+   * Adiciona uma nova regra de taxa ao array `fees` de um contrato existente.
+   *
+   * @param {string|import("mongoose").Types.ObjectId} contractId - ID do contrato de taxas.
+   * @param {Object} feeRule - Objeto contendo os dados da nova regra de taxa.
+   * @param {"CREDIT"|"DEBIT"|"VOUCHER"} feeRule.paymentMethod - Método de pagamento.
+   * @param {number} [feeRule.minInstallments] - Quantidade mínima de parcelas.
+   * @param {number} [feeRule.maxInstallments] - Quantidade máxima de parcelas.
+   * @param {number} feeRule.agreedFeePercentage - Taxa percentual contratada.
+   * @returns {Promise<import("mongoose").Document|null>} O documento do contrato atualizado ou `null` se não localizado.
    */
   async addFeeRule(contractId, feeRule) {
     return this.model.findOneAndUpdate(
@@ -65,7 +97,11 @@ class ContractFeeRepository extends BaseRepository {
   }
 
   /**
-   * Remove uma regra específica do array de taxas.
+   * Remove uma regra específica do array `fees` do contrato pelo seu sub-ID (`_id`).
+   *
+   * @param {string|import("mongoose").Types.ObjectId} contractId - ID do contrato de taxas.
+   * @param {string|import("mongoose").Types.ObjectId} feeRuleId - ID da regra de taxa a ser removida.
+   * @returns {Promise<import("mongoose").Document|null>} O documento do contrato atualizado ou `null` se não localizado.
    */
   async removeFeeRule(contractId, feeRuleId) {
     return this.model.findOneAndUpdate(
@@ -76,4 +112,8 @@ class ContractFeeRepository extends BaseRepository {
   }
 }
 
+/**
+ * Instância única (Singleton) do repositório de Contratos de Taxa pronta para uso na camada de serviços.
+ * @type {ContractFeeRepository}
+ */
 export default new ContractFeeRepository();
