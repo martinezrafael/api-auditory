@@ -13,41 +13,48 @@ import contractFeeRoutes from "./contractFeeRoutes.js";
 import auditRoutes from "./auditRoutes.js";
 import documentRoutes from "./documentRoutes.js";
 
+/**
+ * Função responsável por registrar todos os middlewares globais e os roteadores da aplicação Express.
+ * Concentra a inicialização de todos os módulos de rotas do sistema.
+ *
+ * @param {express.Express} app - Instância da aplicação Express.
+ * @returns {void}
+ */
 const routes = (app) => {
-  // json middleware
+  // Middleware para parsing de corpos de requisição em formato JSON
   app.use(express.json());
 
-  // user
+  // Módulo de Usuários
   app.use(userRoutes);
 
-  //company
+  // Módulo de Empresas
   app.use(companyRoutes);
 
-  // bank
+  // Módulo Bancário (Bancos, Contas Bancárias e Transações Bancárias)
   app.use(bankRoutes);
   app.use(bankAccountRoutes);
   app.use(bankTransactionRoutes);
 
-  // settlements
+  // Módulo de Liquidações / Repasses
   app.use(settlementRoutes);
 
-  //credit
+  // Módulo de Crédito (Solicitações e Ofertas)
   app.use(creditRequestRoutes);
   app.use(creditOfferRoutes);
 
-  // card acquirer
+  // Módulo de Adquirentes / Credenciadoras
   app.use(cardAcquirerRoutes);
 
-  // cardtransactions
+  // Módulo de Transações de Cartão
   app.use(cardTransactionRoutes);
 
-  // contract fee
+  // Módulo de Taxas Contratuais
   app.use(contractFeeRoutes);
 
-  // audit
+  // Módulo de Auditoria
   app.use(auditRoutes);
 
-  // document
+  // Módulo de Documentos
   app.use(documentRoutes);
 };
 
