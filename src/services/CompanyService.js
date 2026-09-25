@@ -1,33 +1,14 @@
+import mongoose from "mongoose";
 import BaseService from "./BaseService.js";
 import companyRepository from "../database/repositories/CompanyRepository.js";
+import userRepository from "../database/repositories/UserRepository.js";
 
-/**
- * Serviço responsável por conter as regras de negócio relativas à entidade de Empresas.
- * Herda os métodos genéricos da camada de serviço (`BaseService`) e utiliza o `CompanyRepository` para persistência.
- *
- * @class CompanyService
- * @extends {BaseService}
- */
 class CompanyService extends BaseService {
-  /**
-   * Instancia o `CompanyService` fornecendo o `companyRepository` para a classe base.
-   */
   constructor() {
     super(companyRepository);
   }
 
-  /**
-   * Sobrescreve o método `create` para validar se o CNPJ e a Razão Social já estão cadastrados antes de salvar.
-   *
-   * @param {Object} data - Dados da empresa a ser criada.
-   * @param {string} data.documentNumber - CNPJ da empresa.
-   * @param {string} data.legalName - Razão social da empresa.
-   * @returns {Promise<Object>} Documento da empresa criada.
-   * @throws {Error} Lança erro 400 caso o CNPJ ou a Razão Social já estejam em uso.
-   */
-  async create(data) {
-    const { documentNumber, legalName } = data;
-
+  async validateCompanyUniqueness(documentNumber, legalName) {
     const existingCnpj = await this.repository.findByCnpj(documentNumber);
     if (existingCnpj) {
       const error = new Error("Este CNPJ já está em uso no sistema.");
@@ -41,29 +22,92 @@ class CompanyService extends BaseService {
       error.statusCode = 400;
       throw error;
     }
-
-    const company = await super.create(data);
-    return company;
   }
 
   /**
-   * Sobrescreve o método `getAll` da BaseService para buscar todas as empresas com os usuários populados.
-   *
-   * @returns {Promise<Array<Object>>} Lista de empresas contendo os dados dos usuários associados.
+   * Cria uma empresa e seu usuário inicial de forma atômica.
    */
+  async createWithUser({ companyData, userData }) {
+    await this.validateCompanyUniqueness(
+      companyData.documentNumber,
+      companyData.legalName,
+    );
+
+    // Valida se e-mail do usuário já existe
+    const existingUser = await userRepository.findByEmail(userData.email);
+    if (existingUser) {
+      const error = new Error("Este e-mail de usuário já está em uso.");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      const userId = new mongoose.Types.ObjectId();
+
+      // 1. Cria a empresa
+      const [company] = await this.repository.create(
+        [
+          {
+            ...companyData,
+            createdBy: userId,
+          },
+        ],
+        { session },
+      );
+
+      // 2. Cria o usuário apontando para a empresa
+      const [user] = await userRepository.create(
+        [
+          {
+            _id: userId,
+            ...userData,
+            company: company._id,
+          },
+        ],
+        { session },
+      );
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return { company, user };
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
+    }
+  }
+
+  /**
+   * Adiciona um novo usuário a uma empresa existente.
+   */
+  async addUserToCompany(companyId, userData) {
+    const company = await this.getById(companyId);
+
+    // Valida e-mail duplicado
+    const existingUser = await userRepository.findByEmail(userData.email);
+    if (existingUser) {
+      const error = new Error("Este e-mail de usuário já está em uso.");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // Cria o usuário com vínculo na empresa
+    const user = await userRepository.create({
+      ...userData,
+      company: company._id,
+    });
+
+    return user;
+  }
+
   async getAll() {
     return this.repository.findCompanies();
   }
-  s;
 
-  /**
-   * Sobrescreve o método `getById` da BaseService para buscar uma empresa com os usuários populados
-   * e validar sua existência.
-   *
-   * @param {string} id - Identificador único da empresa.
-   * @returns {Promise<Object>} Dados da empresa localizada.
-   * @throws {Error} Lança um erro com statusCode 404 caso a empresa não seja encontrada.
-   */
   async getById(id) {
     const company = await this.repository.findCompanyById(id);
 
@@ -75,10 +119,36 @@ class CompanyService extends BaseService {
 
     return company;
   }
+
+  /**
+   * Soft Delete da empresa e exclusão em cascata dos seus usuários.
+   */
+  async delete(id) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      const deletedCompany = await this.repository.delete(id, { session });
+
+      if (!deletedCompany) {
+        const error = new Error("Empresa não encontrada para exclusão.");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      // Desativa todos os usuários vinculados à empresa em cascata
+      await userRepository.softDeleteByCompany(id, session);
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return deletedCompany;
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
+    }
+  }
 }
 
-/**
- * Instância única (Singleton) do serviço de Empresas pronta para ser utilizada pelos controllers.
- * @type {CompanyService}
- */
 export default new CompanyService();

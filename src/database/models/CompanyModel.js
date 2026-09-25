@@ -2,38 +2,31 @@ import mongoose from "mongoose";
 import AddressModel from "./AddressModel.js";
 
 /**
- * Esquema do Mongoose para a coleção de Empresas (`companies`).
- * Define a estrutura dos documentos, validações de campos, tipos e relacionamentos.
+ * Interface do documento de Empresa (`Company`).
  *
  * @typedef {Object} ICompany
- * @property {mongoose.Types.ObjectId[]} owners - Lista de IDs dos usuários proprietários da empresa.
+ * @property {mongoose.Types.ObjectId[]} [users] - Lista de IDs dos usuários vinculados à empresa.
  * @property {mongoose.Types.ObjectId} createdBy - ID do usuário que realizou o cadastro da empresa.
- * @property {string} legalName - Razão social da empresa (deve ser única).
+ * @property {string} legalName - Razão social da empresa (única no sistema).
  * @property {string} [tradeName] - Nome fantasia da empresa.
- * @property {string} documentNumber - Número do CNPJ da empresa (deve ser único).
+ * @property {string} documentNumber - Número do CNPJ da empresa (único no sistema).
  * @property {string} cnaeCode - Código do CNAE (Classificação Nacional de Atividades Econômicas).
- * @property {Object} address - Dados do endereço da empresa (baseado em `AddressModel`).
+ * @property {import("./AddressModel.js").IAddress} address - Objeto com os dados do endereço estruturado da empresa.
  * @property {number} contactPhone - Número de telefone principal de contato.
  * @property {string} [contactEmail] - Endereço de e-mail de contato da empresa.
  * @property {number} [creditScore=0] - Pontuação de crédito da empresa.
+ * @property {boolean} [isDeleted=false] - Indicador de exclusão lógica (Soft Delete).
+ * @property {Date|null} [deletedAt=null] - Timestamp da realização da exclusão lógica.
  * @property {Date} createdAt - Data e hora de criação do registro (gerado automaticamente).
  * @property {Date} updatedAt - Data e hora da última atualização (gerado automaticamente).
  */
+
+/**
+ * Esquema do Mongoose para a coleção de Empresas (`companies`).
+ * Define a estrutura dos documentos, validações de campos, tipos, chave única e relacionamentos.
+ */
 const CompanyModel = new mongoose.Schema(
   {
-    /**
-     * Referências aos usuários proprietários da empresa.
-     * @type {Array<mongoose.Schema.Types.ObjectId>}
-     * @see {@link User} - Relacionamento com o model/coleção 'users'.
-     */
-    owners: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: [true, "O campo 'Usuário' é obrigatório."],
-      },
-    ],
-
     /**
      * Referência ao usuário responsável pela criação do cadastro.
      * @type {mongoose.Schema.Types.ObjectId}
@@ -145,8 +138,17 @@ const CompanyModel = new mongoose.Schema(
     versionKey: false,
     /** Adiciona automaticamente os campos `createdAt` e `updatedAt`. */
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
+
+CompanyModel.virtual("users", {
+  ref: "users",
+  localField: "_id",
+  foreignField: "company",
+  match: { isDeleted: { $ne: true } },
+});
 
 /**
  * Modelo de dados do Mongoose para a coleção 'companies'.

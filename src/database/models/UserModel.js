@@ -1,32 +1,37 @@
 import mongoose from "mongoose";
 
 /**
- * Esquema do Mongoose para a coleção de Usuários.
- * Define a estrutura dos documentos, validações de campos e relacionamentos.
+ * Interface do documento de Usuário do sistema (`User`).
  *
  * @typedef {Object} IUser
- * @property {mongoose.Types.ObjectId[]} [companies] - Lista de IDs das empresas vinculadas ao usuário.
+ * @property {mongoose.Types.ObjectId} company - ID da empresa vinculada ao usuário.
  * @property {string} fullName - Nome completo do usuário (mínimo de 3 caracteres).
  * @property {string} email - Endereço de e-mail do usuário.
- * @property {string} password - Senha criptografada do usuário (mínimo de 8 caracteres, ocultado por padrão nas consultas).
+ * @property {string} password - Senha criptografada do usuário (mínimo de 8 caracteres, ocultada por padrão nas consultas).
  * @property {"ADMIN" | "AUDITOR" | "BUSINESS_OWNER" | "BANK_MANAGER"} role - Perfil/nível de acesso do usuário no sistema.
  * @property {boolean} [isActive=true] - Define se a conta do usuário está ativa.
+ * @property {boolean} [isDeleted=false] - Indicador de exclusão lógica (Soft Delete).
+ * @property {Date|null} [deletedAt=null] - Timestamp da realização da exclusão lógica.
  * @property {Date} createdAt - Data e hora de criação do registro (gerado automaticamente).
- * @property {Date} updatedAt - Data e hora da última atualização do registro (gerado automaticamente).
+ * @property {Date} updatedAt - Data e hora da última atualização (gerado automaticamente).
+ */
+
+/**
+ * Esquema do Mongoose para a coleção de Usuários (`users`).
+ * Define a estrutura dos documentos, validações de campos, exclusão lógica e relacionamentos.
  */
 const UserModel = new mongoose.Schema(
   {
     /**
-     * Referências às empresas associadas ao usuário.
-     * @type {Array<mongoose.Schema.Types.ObjectId>}
+     * Referência à empresa à qual o usuário pertence.
+     * @type {mongoose.Schema.Types.ObjectId}
      * @see {@link Company} - Relacionamento com o model/coleção 'companies'.
      */
-    companies: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "companies",
-      },
-    ],
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      required: [true, "O campo 'Empresa' é obrigatório."],
+    },
 
     /**
      * Nome completo do usuário.
