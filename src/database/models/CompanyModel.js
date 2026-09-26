@@ -35,7 +35,6 @@ const CompanyModel = new mongoose.Schema(
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-      required: true,
     },
 
     /**
@@ -138,11 +137,19 @@ const CompanyModel = new mongoose.Schema(
     versionKey: false,
     /** Adiciona automaticamente os campos `createdAt` e `updatedAt`. */
     timestamps: true,
+    /** Garante que campos virtuais sejam incluídos nas respostas JSON. */
     toJSON: { virtuals: true },
+    /** Garante que campos virtuais sejam incluídos na conversão para objeto JavaScript puro. */
     toObject: { virtuals: true },
   },
 );
 
+/**
+ * Campo virtual 'users' para popular os usuários associados à empresa via Mongoose Populate.
+ * Realiza a junção buscando na coleção 'users' onde o campo 'company' corresponde ao `_id` da empresa atual.
+ *
+ * @see {@link User}
+ */
 CompanyModel.virtual("users", {
   ref: "users",
   localField: "_id",

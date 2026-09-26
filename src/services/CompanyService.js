@@ -27,13 +27,25 @@ class CompanyService extends BaseService {
   /**
    * Cria uma empresa e seu usuário inicial de forma atômica.
    */
-  async createWithUser({ companyData, userData }) {
+  async createWithUser(payload = {}) {
+    const { companyData, userData } = payload;
+
+    // Validação defensiva do payload de entrada
+    if (!companyData || !userData) {
+      const error = new Error(
+        "Payload inválido. Os objetos 'companyData' e 'userData' são obrigatórios.",
+      );
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // Valida unicidade de CNPJ e Razão Social
     await this.validateCompanyUniqueness(
       companyData.documentNumber,
       companyData.legalName,
     );
 
-    // Valida se e-mail do usuário já existe
+    // Valida se o e-mail do usuário já existe
     const existingUser = await userRepository.findByEmail(userData.email);
     if (existingUser) {
       const error = new Error("Este e-mail de usuário já está em uso.");
@@ -47,7 +59,7 @@ class CompanyService extends BaseService {
     try {
       const userId = new mongoose.Types.ObjectId();
 
-      // 1. Cria a empresa
+      // 1. Cria a empresa apontando para o id do usuário que será criado
       const [company] = await this.repository.create(
         [
           {
@@ -58,7 +70,7 @@ class CompanyService extends BaseService {
         { session },
       );
 
-      // 2. Cria o usuário apontando para a empresa
+      // 2. Cria o usuário apontando para o id da empresa criada
       const [user] = await userRepository.create(
         [
           {
@@ -85,6 +97,14 @@ class CompanyService extends BaseService {
    * Adiciona um novo usuário a uma empresa existente.
    */
   async addUserToCompany(companyId, userData) {
+    if (!userData) {
+      const error = new Error(
+        "Os dados do usuário ('userData') são obrigatórios.",
+      );
+      error.statusCode = 400;
+      throw error;
+    }
+
     const company = await this.getById(companyId);
 
     // Valida e-mail duplicado

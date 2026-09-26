@@ -17,7 +17,7 @@ class CompanyController extends BaseController {
   }
 
   /**
-   * Handler para a criação atômica de uma empresa e do seu usuário inicial (`POST /companies/with-user`).
+   * Handler para a criação atômica de uma empresa e do seu usuário inicial (`POST /companies/users`).
    *
    * @async
    * @param {import("express").Request} req - Objeto de requisição do Express contendo `companyData` e `userData` no corpo (`req.body`).
@@ -27,6 +27,7 @@ class CompanyController extends BaseController {
    */
   createWithUser = async (req, res, next) => {
     try {
+      console.log("req.body recebido:", req.body);
       const result = await this.service.createWithUser(req.body);
       return res.status(201).json({
         message: "Empresa e usuário criados com sucesso.",

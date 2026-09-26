@@ -19,14 +19,14 @@ const routes = express.Router();
 routes.post("/companies", companyController.create);
 
 /**
- * @route POST /companies/with-user
+ * @route POST /companies/users
  * @description Cria uma empresa e um usuário administrador/inicial na mesma requisição de forma atômica (transacional).
  * @param {express.Request} req - Objeto de requisição contendo `companyData` e `userData` no corpo (`req.body`).
  * @param {express.Response} res - Objeto de resposta do Express.
  * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
  * @returns {Promise<void>} Retorna os documentos da empresa e do usuário criados com status HTTP 201.
  */
-routes.post("/companies/with-user", companyController.createWithUser);
+routes.post("/companies/users", companyController.createWithUser);
 
 /**
  * @route POST /companies/:id/users

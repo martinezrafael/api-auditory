@@ -8,9 +8,20 @@ class BaseRepository {
     this.model = model;
   }
 
-  async create(data) {
+  /**
+   * Cria um ou mais documentos.
+   * Suporta transações passando { session } nas opções.
+   *
+   * @param {Object|Object[]} data - Dados do documento ou array de documentos.
+   * @param {Object} [options={}] - Opções do Mongoose (ex: { session }).
+   */
+  async create(data, options = {}) {
+    if (Array.isArray(data)) {
+      return this.model.create(data, options);
+    }
+
     const document = new this.model(data);
-    return document.save();
+    return document.save(options);
   }
 
   /**
@@ -44,7 +55,7 @@ class BaseRepository {
    * @param {string|mongoose.Types.ObjectId} id - O ID do documento a ser inativado.
    * @returns {Promise<mongoose.Document|null>} O documento com a flag de deleção atualizada.
    */
-  async delete(id) {
+  async delete(id, options = {}) {
     return this.model.findByIdAndUpdate(
       id,
       {
@@ -53,7 +64,7 @@ class BaseRepository {
           deletedAt: new Date(),
         },
       },
-      { new: true },
+      { new: true, ...options },
     );
   }
 }

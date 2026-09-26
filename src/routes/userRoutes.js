@@ -14,7 +14,12 @@ const routes = express.Router();
  * @param {express.Response} res - Objeto de resposta do Express.
  * @returns {Promise<void>} Retorna o usuário criado com status 201.
  */
-routes.post("/users", UserController.create);
+//routes.post("/users", UserController.create);
+/**
+ * Por enquanto vamos manter a criação de usuários, apenas via company
+ * Rota para criação de usuário no `companyRoutes.js`:
+ * routes.post("/companies/users", companyController.createWithUser);
+ */
 
 /**
  * @route GET /users
