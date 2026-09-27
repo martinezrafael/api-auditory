@@ -158,6 +158,22 @@ class CompanyService extends BaseService {
   }
 
   /**
+   * Retorna a lista de usuários vinculados a uma empresa específica.
+   *
+   * @async
+   * @param {string|mongoose.Types.ObjectId} companyId - ID único da empresa.
+   * @returns {Promise<import("../models/UserModel.js").IUser[]>} Lista de usuários da empresa.
+   * @throws {Error} Lança erro com `statusCode = 404` se a empresa não for encontrada.
+   */
+  async getUsersByCompanyId(companyId) {
+    // Garante que a empresa existe (lança 404 se não encontrada)
+    await this.getById(companyId);
+
+    // Busca os usuários vinculados à empresa
+    return userRepository.findByCompanyId(companyId);
+  }
+
+  /**
    * Busca e lista todas as empresas ativas cadastradas no banco de dados.
    *
    * @async

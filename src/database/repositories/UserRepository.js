@@ -44,6 +44,20 @@ class UserRepository extends BaseRepository {
   }
 
   /**
+   * Busca todos os usuários ativos vinculados a uma determinada empresa.
+   *
+   * @async
+   * @param {string|import("mongoose").Types.ObjectId} companyId - Identificador único da empresa.
+   * @returns {Promise<Array<import("mongoose").Document>>} Lista de documentos de usuários vinculados à empresa.
+   */
+  async findByCompanyId(companyId) {
+    return this.model.find({
+      company: companyId,
+      isDeleted: { $ne: true },
+    });
+  }
+
+  /**
    * Busca um usuário ativo pelo endereço de e-mail.
    *
    * @async
@@ -68,6 +82,11 @@ class UserRepository extends BaseRepository {
 
   /**
    * Executa soft delete em massa nos usuários de uma empresa específica.
+   *
+   * @async
+   * @param {string|import("mongoose").Types.ObjectId} companyId - Identificador único da empresa cujos usuários serão desativados.
+   * @param {import("mongoose").ClientSession|null} [session=null] - Sessão do Mongoose para controle de transação ACID.
+   * @returns {Promise<import("mongodb").UpdateResult>} Resultado da operação de atualização do Mongoose.
    */
   async softDeleteByCompany(companyId, session = null) {
     return this.model.updateMany(

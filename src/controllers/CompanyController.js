@@ -17,7 +17,7 @@ class CompanyController extends BaseController {
   }
 
   /**
-   * Handler para a criação atômica de uma empresa e do seu usuário inicial (`POST /companies/with-user`).
+   * Handler para a criação atômica de uma empresa e do seu usuário inicial (`POST /companies/users`).
    *
    * @async
    * @param {import("express").Request} req - Objeto de requisição do Express contendo `companyData` e `userData` no corpo (`req.body`).
@@ -54,6 +54,24 @@ class CompanyController extends BaseController {
         message: "Usuário adicionado à empresa com sucesso.",
         data: user,
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Handler para listar os usuários de uma empresa específica (`GET /companies/:id/users`).
+   *
+   * @async
+   * @param {import("express").Request} req - Objeto de requisição do Express contendo o ID da empresa em `req.params.id`.
+   * @param {import("express").Response} res - Objeto de resposta do Express.
+   * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 contendo a lista de usuários da empresa.
+   */
+  getUsersByCompany = async (req, res, next) => {
+    try {
+      const users = await this.service.getUsersByCompanyId(req.params.id);
+      return res.status(200).json(users);
     } catch (error) {
       next(error);
     }

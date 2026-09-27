@@ -29,6 +29,16 @@ routes.post("/companies/users", companyController.createCompanyWithUser);
 routes.post("/companies/:id/users", companyController.addUserToCompany);
 
 /**
+ * @route GET /companies/:id/users
+ * @description Retorna a lista de todos os usuários pertencentes a uma empresa específica.
+ * @param {express.Request} req - Objeto de requisição contendo o parâmetro `id` na URL (`req.params.id`).
+ * @param {express.Response} res - Objeto de resposta do Express.
+ * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
+ * @returns {Promise<void>} Lista de usuários com status HTTP 200.
+ */
+routes.get("/companies/:id/users", companyController.getUsersByCompany);
+
+/**
  * @route GET /companies
  * @description Retorna a lista de todas as empresas ativas cadastradas com os dados de usuários populados.
  * @param {express.Request} req - Objeto de requisição do Express.
