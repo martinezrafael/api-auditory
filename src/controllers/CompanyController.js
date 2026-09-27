@@ -17,7 +17,7 @@ class CompanyController extends BaseController {
   }
 
   /**
-   * Handler para a criação atômica de uma empresa e do seu usuário inicial (`POST /companies/users`).
+   * Handler para a criação atômica de uma empresa e do seu usuário inicial (`POST /companies/with-user`).
    *
    * @async
    * @param {import("express").Request} req - Objeto de requisição do Express contendo `companyData` e `userData` no corpo (`req.body`).
@@ -25,10 +25,10 @@ class CompanyController extends BaseController {
    * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
    * @returns {Promise<import("express").Response>} Resposta HTTP 201 contendo a mensagem de sucesso e os dados da empresa e usuário criados.
    */
-  createWithUser = async (req, res, next) => {
+  createCompanyWithUser = async (req, res, next) => {
     try {
       console.log("req.body recebido:", req.body);
-      const result = await this.service.createWithUser(req.body);
+      const result = await this.service.createCompanyWithUser(req.body);
       return res.status(201).json({
         message: "Empresa e usuário criados com sucesso.",
         data: result,
@@ -47,7 +47,7 @@ class CompanyController extends BaseController {
    * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
    * @returns {Promise<import("express").Response>} Resposta HTTP 201 contendo a mensagem de sucesso e o documento do usuário criado.
    */
-  addUser = async (req, res, next) => {
+  addUserToCompany = async (req, res, next) => {
     try {
       const user = await this.service.addUserToCompany(req.params.id, req.body);
       return res.status(201).json({
