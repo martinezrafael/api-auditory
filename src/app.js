@@ -1,16 +1,6 @@
-// color terminal
-import chalk from "chalk";
-
-// server
 import express from "express";
-
-// database
 import connectToDatabase from "./database/config/database.js";
-
-// routes
 import routes from "./routes/index.js";
-
-// error middleware
 import errorHandler from "./middlewares/errorHandler.js";
 
 /**

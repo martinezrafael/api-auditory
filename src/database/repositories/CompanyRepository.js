@@ -11,16 +11,30 @@ import companyModel from "../models/CompanyModel.js";
 class CompanyRepository extends BaseRepository {
   /**
    * Instancia o `CompanyRepository` passando o modelo `companyModel` para a classe base.
+   *
+   * =========================================================================
+   * MÉTODOS HERDADOS AUTOMATICAMENTE DO BaseRepository (Módulos Padrão CRUD):
+   * =========================================================================
+   * - find(filter, options)   -> Busca genérica com suporte a paginação e projeção.
+   * - findById(id)            -> Busca genérica por ID considerando `isDeleted: false`.
+   * - create(data, options)   -> Criação de um ou mais documentos.
+   * - update(id, data)        -> Atualização parcial por ID.
+   * - delete(id, options)     -> Exclusão lógica (soft delete via flag `isDeleted`).
+   * =========================================================================
    */
   constructor() {
     super(companyModel);
   }
 
+  /* =========================================================================
+   * MÉTODOS ESPECÍFICOS / CONSULTAS POPULADAS
+   * ========================================================================= */
+
   /**
-   * Busca todas as empresas ativas com seus usuários e criador populados.
+   * Busca todas as empresas ativas trazendo relacionamentos populados (`users` e `createdBy`).
    *
    * @async
-   * @returns {Promise<Array<import("mongoose").Document>>} Lista de empresas ativas.
+   * @returns {Promise<Array<import("mongoose").Document>>} Lista de empresas ativas com dados vinculados.
    */
   async findCompanies() {
     return this.model
@@ -33,11 +47,11 @@ class CompanyRepository extends BaseRepository {
   }
 
   /**
-   * Busca uma empresa ativa por ID com usuários e criador populados.
+   * Busca uma empresa ativa por ID trazendo relacionamentos populados (`users` e `createdBy`).
    *
    * @async
-   * @param {string|import("mongoose").Types.ObjectId} id - ID da empresa.
-   * @returns {Promise<import("mongoose").Document|null>} O documento da empresa ou null.
+   * @param {string|import("mongoose").Types.ObjectId} id - ID único da empresa.
+   * @returns {Promise<import("mongoose").Document|null>} O documento da empresa localizada ou `null`.
    */
   async findCompanyById(id) {
     return this.model
@@ -50,11 +64,11 @@ class CompanyRepository extends BaseRepository {
   }
 
   /**
-   * Busca uma empresa ativa pelo número do CNPJ.
+   * Busca uma empresa ativa pelo número do CNPJ (`documentNumber`).
    *
    * @async
-   * @param {string} cnpj - Número do CNPJ.
-   * @returns {Promise<import("mongoose").Document|null>} O documento da empresa ou null.
+   * @param {string} cnpj - Número do CNPJ a ser pesquisado.
+   * @returns {Promise<import("mongoose").Document|null>} O documento da empresa ou `null`.
    */
   async findByCnpj(cnpj) {
     return this.model.findOne({
@@ -64,15 +78,19 @@ class CompanyRepository extends BaseRepository {
   }
 
   /**
-   * Busca uma empresa ativa pela Razão Social.
+   * Busca uma empresa ativa pela Razão Social (`legalName`).
    *
    * @async
-   * @param {string} legalName - Razão Social da empresa.
-   * @returns {Promise<import("mongoose").Document|null>} O documento da empresa ou null.
+   * @param {string} legalName - Razão Social da empresa a ser pesquisada.
+   * @returns {Promise<import("mongoose").Document|null>} O documento da empresa ou `null`.
    */
   async findByLegalName(legalName) {
     return this.model.findOne({ legalName, isDeleted: { $ne: true } });
   }
 }
 
+/**
+ * Instância única (Singleton) do repositório de Empresas.
+ * @type {CompanyRepository}
+ */
 export default new CompanyRepository();

@@ -15,10 +15,21 @@ import userRepository from "../database/repositories/UserRepository.js";
 class CompanyService extends BaseService {
   /**
    * Instancia o `CompanyService` injetando o repositório de empresas (`companyRepository`).
+   *
+   * =========================================================================
+   * MÉTODOS HERDADOS AUTOMATICAMENTE DO BaseService (CRUD Padrão do Repositório):
+   * =========================================================================
+   * - create(data)        -> Criação simples de um registro via repositório.
+   * - update(id, data)    -> Atualização simples de uma empresa pelo ID.
+   * =========================================================================
    */
   constructor() {
     super(companyRepository);
   }
+
+  /* =========================================================================
+   * MÉTODOS PRIVADOS & UTILITÁRIOS
+   * ========================================================================= */
 
   /**
    * Método auxiliar para criação de objetos de Erro com código de status HTTP.
@@ -46,6 +57,10 @@ class CompanyService extends BaseService {
     return bcrypt.hash(password, salt);
   }
 
+  /* =========================================================================
+   * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS (Regras de Negócio & Relacionamentos)
+   * ========================================================================= */
+
   /**
    * Valida se o CNPJ e a Razão Social informados já estão cadastrados na base de dados.
    *
@@ -53,7 +68,7 @@ class CompanyService extends BaseService {
    * @param {string} documentNumber - Número do CNPJ da empresa a ser validado.
    * @param {string} legalName - Razão Social da empresa a ser validada.
    * @returns {Promise<void>} Não retorna valor se a validação for bem-sucedida.
-   * @throws {Error} Lança um erro com `statusCode = 400` se o CNPJ ou a Razão Social já estiverem em uso.
+   * @throws {Error} Lança erro 400 se o CNPJ ou a Razão Social já estiverem em uso.
    */
   async validateCompanyUniqueness(documentNumber, legalName) {
     const existingCnpj = await this.repository.findByCnpj(documentNumber);
@@ -249,8 +264,13 @@ class CompanyService extends BaseService {
     return userRepository.delete(userId);
   }
 
+  /* =========================================================================
+   * MÉTODOS SOBRESCRITOS DO BASE SERVICE (Com Lógica Customizada de Empresa)
+   * ========================================================================= */
+
   /**
    * Busca e lista todas as empresas ativas cadastradas no banco de dados.
+   * (Sobrescreve o `getAll` padrão para utilizar a query do repositório de empresas).
    *
    * @async
    * @returns {Promise<import("../models/CompanyModel.js").ICompany[]>} Lista contendo as empresas ativas.
@@ -261,11 +281,12 @@ class CompanyService extends BaseService {
 
   /**
    * Busca os dados de uma empresa específica pelo seu ID.
+   * (Sobrescreve o `getById` para garantir o tratamento com erro HTTP 404 apropriado).
    *
    * @async
    * @param {string|mongoose.Types.ObjectId} id - ID da empresa a ser recuperada.
    * @returns {Promise<import("../models/CompanyModel.js").ICompany>} O documento completo da empresa encontrada.
-   * @throws {Error} Lança erro com `statusCode = 404` se a empresa não existir ou estiver deletada.
+   * @throws {Error} Lança erro 404 se a empresa não existir ou estiver deletada.
    */
   async getById(id) {
     const company = await this.repository.findCompanyById(id);
@@ -278,12 +299,13 @@ class CompanyService extends BaseService {
   }
 
   /**
-   * Executa a exclusão lógica (Soft Delete) de uma empresa e efetua o descarte em cascata de todos os usuários associados via transação.
+   * Executa a exclusão lógica (Soft Delete) de uma empresa e efetua a exclusão em cascata de todos os usuários associados via transação.
+   * (Sobrescreve o `delete` para gerenciar a transação de desativação em cascata).
    *
    * @async
    * @param {string|mongoose.Types.ObjectId} id - ID da empresa a ser excluída.
-   * @returns {Promise<import("../models/CompanyModel.js").ICompany>} O documento da empresa que sofreu a exclusão lógica.
-   * @throws {Error} Lança erro 404 caso a empresa não seja localizada para exclusão.
+   * @returns {Promise<import("../models/CompanyModel.js").ICompany>} O documento da empresa excluída.
+   * @throws {Error} Lança erro 404 caso a empresa não seja localizada.
    */
   async delete(id) {
     const session = await mongoose.startSession();

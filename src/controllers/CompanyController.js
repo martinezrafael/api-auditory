@@ -2,28 +2,44 @@ import BaseController from "./BaseController.js";
 import companyService from "../services/CompanyService.js";
 
 /**
- * Controller responsável por manipular as requisições HTTP do recurso de Empresas (`Company`).
- * Extende a classe `BaseController` para herdar os handlers genéricos de CRUD (`getAll`, `getById`, `create`, `update`, `delete`).
+ * Controller responsável por manipular as requisições HTTP da entidade Company.
+ * Herda as operações genéricas de CRUD da classe BaseController e expõe
+ * endpoints específicos para a gestão do relacionamento entre Empresas e Usuários.
  *
  * @class CompanyController
  * @extends {BaseController}
  */
 class CompanyController extends BaseController {
   /**
-   * Instancia o `CompanyController` injetando o serviço de empresas (`companyService`).
+   * Inicializa o controller injetando a instância de CompanyService na classe pai.
+   *
+   * =========================================================================
+   * MÉTODOS HERDADOS DO BASECONTROLLER:
+   * =========================================================================
+   * - getAll(req, res, next)    -> GET    /companies
+   * - getById(req, res, next)   -> GET    /companies/:id
+   * - create(req, res, next)    -> POST   /companies
+   * - update(req, res, next)    -> PUT    /companies/:id
+   * - delete(req, res, next)    -> DELETE /companies/:id
+   * =========================================================================
    */
   constructor() {
     super(companyService);
   }
 
+  /* =========================================================================
+   * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS
+   * ========================================================================= */
+
   /**
-   * Handler para a criação atômica de uma empresa e do seu usuário inicial (`POST /companies/users`).
+   * Cria uma nova empresa e o seu usuário administrador inicial em uma única transação atômica.
    *
+   * @route POST /companies/users
    * @async
-   * @param {import("express").Request} req - Objeto de requisição do Express contendo `companyData` e `userData` no corpo (`req.body`).
-   * @param {import("express").Response} res - Objeto de resposta do Express.
-   * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
-   * @returns {Promise<import("express").Response>} Resposta HTTP 201 contendo os dados da empresa e usuário criados.
+   * @param {import("express").Request} req - Objeto de requisição contendo `companyData` e `userData` em `req.body`.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 201 com os dados da empresa e usuário criados.
    */
   createCompanyWithUser = async (req, res, next) => {
     try {
@@ -38,20 +54,21 @@ class CompanyController extends BaseController {
   };
 
   /**
-   * Handler para associar um novo usuário a uma empresa existente (`POST /companies/:companyId/users`).
+   * Adiciona um novo usuário a uma empresa já existente.
    *
+   * @route POST /companies/:companyId/users
    * @async
-   * @param {import("express").Request} req - Objeto de requisição do Express contendo `companyId` em `req.params` e os dados do usuário em `req.body`.
-   * @param {import("express").Response} res - Objeto de resposta do Express.
-   * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
-   * @returns {Promise<import("express").Response>} Resposta HTTP 201 contendo o documento do usuário criado.
+   * @param {import("express").Request} req - Requisição com `companyId` nos parâmetros e dados do usuário no corpo.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 201 com o usuário criado.
    */
   addUserToCompany = async (req, res, next) => {
     try {
       const { companyId } = req.params;
       const user = await this.service.addUserToCompany(companyId, req.body);
       return res.status(201).json({
-        message: "Usuário adicionado à empresa com sucesso.",
+        message: "Usuário vinculado à empresa com sucesso.",
         data: user,
       });
     } catch (error) {
@@ -60,13 +77,14 @@ class CompanyController extends BaseController {
   };
 
   /**
-   * Handler para listar todos os usuários de uma empresa específica (`GET /companies/:companyId/users`).
+   * Recupera a lista de todos os usuários associados a uma empresa específica.
    *
+   * @route GET /companies/:companyId/users
    * @async
-   * @param {import("express").Request} req - Objeto de requisição do Express contendo `companyId` em `req.params`.
-   * @param {import("express").Response} res - Objeto de resposta do Express.
-   * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
-   * @returns {Promise<import("express").Response>} Resposta HTTP 200 contendo a lista de usuários da empresa.
+   * @param {import("express").Request} req - Requisição contendo o ID da empresa em `req.params.companyId`.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com o array de usuários.
    */
   getUsersByCompany = async (req, res, next) => {
     try {
@@ -79,13 +97,14 @@ class CompanyController extends BaseController {
   };
 
   /**
-   * Handler para buscar um usuário específico atrelado a uma empresa (`GET /companies/:companyId/users/:userId`).
+   * Busca um usuário específico dentro do contexto de uma determinada empresa.
    *
+   * @route GET /companies/:companyId/users/:userId
    * @async
-   * @param {import("express").Request} req - Objeto de requisição contendo `companyId` e `userId` em `req.params`.
-   * @param {import("express").Response} res - Objeto de resposta do Express.
-   * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
-   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com os dados do usuário encontrado.
+   * @param {import("express").Request} req - Requisição com `companyId` e `userId` nos parâmetros da URL.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com os dados do usuário.
    */
   getUserByCompany = async (req, res, next) => {
     try {
@@ -101,13 +120,14 @@ class CompanyController extends BaseController {
   };
 
   /**
-   * Handler para atualizar os dados de um usuário atrelado a uma empresa (`PUT /companies/:companyId/users/:userId`).
+   * Atualiza as informações de um usuário pertencente a uma empresa específica.
    *
+   * @route PUT /companies/:companyId/users/:userId
    * @async
-   * @param {import("express").Request} req - Objeto de requisição contendo `companyId` e `userId` em `req.params` e novos dados em `req.body`.
-   * @param {import("express").Response} res - Objeto de resposta do Express.
-   * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
-   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com os dados do usuário atualizado.
+   * @param {import("express").Request} req - Requisição com IDs nos parâmetros e novos dados no corpo.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com os dados atualizados.
    */
   updateUserByCompany = async (req, res, next) => {
     try {
@@ -127,13 +147,14 @@ class CompanyController extends BaseController {
   };
 
   /**
-   * Handler para desativar (soft delete) um usuário atrelado a uma empresa (`DELETE /companies/:companyId/users/:userId`).
+   * Remove ou desativa a associação de um usuário com uma empresa específica.
    *
+   * @route DELETE /companies/:companyId/users/:userId
    * @async
-   * @param {import("express").Request} req - Objeto de requisição contendo `companyId` e `userId` em `req.params`.
-   * @param {import("express").Response} res - Objeto de resposta do Express.
-   * @param {import("express").NextFunction} next - Função middleware do Express para encaminhamento de erros.
-   * @returns {Promise<import("express").Response>} Resposta HTTP 200 confirmando a remoção do usuário.
+   * @param {import("express").Request} req - Requisição contendo `companyId` e `userId` nos parâmetros.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com a confirmação da remoção.
    */
   deleteUserByCompany = async (req, res, next) => {
     try {
@@ -149,7 +170,6 @@ class CompanyController extends BaseController {
 }
 
 /**
- * Instância única (Singleton) do controller de Empresas para utilização na camada de rotas.
- * @type {CompanyController}
+ * Instância exportada como Singleton para ser utilizada diretamente no arquivo de rotas.
  */
 export default new CompanyController();
