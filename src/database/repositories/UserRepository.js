@@ -44,6 +44,22 @@ class UserRepository extends BaseRepository {
   }
 
   /**
+   * Busca um usuário ativo vinculando explicitamente seu ID e o ID da empresa associada.
+   *
+   * @async
+   * @param {string|import("mongoose").Types.ObjectId} companyId - Identificador único da empresa.
+   * @param {string|import("mongoose").Types.ObjectId} userId - Identificador único do usuário.
+   * @returns {Promise<import("mongoose").Document|null>} O documento do usuário localizado ou null.
+   */
+  async findByIdAndCompanyId(companyId, userId) {
+    return this.model.findOne({
+      _id: userId,
+      company: companyId,
+      isDeleted: { $ne: true },
+    });
+  }
+
+  /**
    * Busca todos os usuários ativos vinculados a uma determinada empresa.
    *
    * @async

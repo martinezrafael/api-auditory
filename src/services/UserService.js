@@ -18,51 +18,6 @@ class UserService extends BaseService {
   }
 
   /**
-   * Cria um novo usuário no sistema realizando a verificação de e-mail duplicado e a criptografia da senha.
-   *
-   * @param {Object} data - Dados do usuário para cadastro.
-   * @param {string} data.email - E-mail do usuário.
-   * @param {string} data.password - Senha em texto puro a ser criptografada.
-   * @returns {Promise<Object>} Dados do usuário criado (sem a senha).
-   * @throws {Error} Lança um erro 400 caso o e-mail já esteja em uso.
-   */
-  async create(data) {
-    const { email, password } = data;
-
-    const emailExisting = await this.repository.findByEmail(email);
-
-    if (emailExisting) {
-      const error = new Error("Este e-mail já está em uso no sistema.");
-      error.statusCode = 400;
-      throw error;
-    }
-
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const userData = {
-      ...data,
-      password: hashedPassword,
-    };
-
-    const user = await super.create(userData);
-
-    const userObject = user.toObject ? user.toObject() : user;
-    delete userObject.password;
-
-    return userObject;
-  }
-
-  /**
-   * Sobrescreve o método `getAll` da BaseService para buscar todos os usuários com as empresas populadas.
-   *
-   * @returns {Promise<Array<Object>>} Lista de usuários com relacionamentos.
-   */
-  async getAll() {
-    return this.repository.findUsers();
-  }
-
-  /**
    * Sobrescreve o método `getById` da BaseService para buscar um usuário com as empresas populadas
    * e validar sua existência.
    *

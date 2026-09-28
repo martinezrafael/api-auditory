@@ -20,33 +20,14 @@ import errorHandler from "./middlewares/errorHandler.js";
 const app = express();
 
 /**
- * Inicialização e monitoramento da conexão com o banco de dados MongoDB.
- * Estabelece a conexão assíncrona e registra os ouvintes de eventos da instância.
+ * Inicialização e conexão com o banco de dados MongoDB.
  */
-const database = await connectToDatabase();
+await connectToDatabase();
 
-/**
- * Listener acionado em caso de erro na conexão com o banco de dados.
- * Loga a mensagem de erro formatada no terminal em tom vermelho.
- */
-database.on("error", (error) => {
-  console.error(chalk.red(`Connection error:[database]: ${error}.`));
-});
-
-/**
- * Listener acionado uma única vez quando a conexão com o banco de dados é estabelecida com sucesso.
- * Loga a confirmação formatada com fundo verde brilhante no terminal.
- */
-database.once("open", () => {
-  console.log(
-    chalk.bgGreenBright(`Connection successfully established: [database].`),
-  );
-});
-
-// Registro das rotas da aplicação e inclusão do middleware de parse JSON
+// Registro das rotas da aplicação
 routes(app);
 
-// Registrar o middleware global de tratamento de erros após a definição de todas as rotas
+// Middleware global de tratamento de erros registrado após todas as rotas
 app.use(errorHandler);
 
 /**

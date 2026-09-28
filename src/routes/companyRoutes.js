@@ -9,6 +9,12 @@ import companyController from "../controllers/CompanyController.js";
 const routes = express.Router();
 
 /**
+ * ==========================================
+ * ROTAS COMPOSTAS E SUB-RECURSOS (USUÁRIOS)
+ * ==========================================
+ */
+
+/**
  * @route POST /companies/users
  * @description Cria uma empresa e um usuário administrador/inicial na mesma requisição de forma atômica (transacional).
  * @param {express.Request} req - Objeto de requisição contendo `companyData` e `userData` no corpo (`req.body`).
@@ -19,24 +25,69 @@ const routes = express.Router();
 routes.post("/companies/users", companyController.createCompanyWithUser);
 
 /**
- * @route POST /companies/:id/users
+ * @route POST /companies/:companyId/users
  * @description Associa e cadastra um novo usuário a uma empresa existente.
- * @param {express.Request} req - Objeto de requisição contendo o ID da empresa em `req.params.id` e os dados do novo usuário no corpo (`req.body`).
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` em `req.params` e dados do novo usuário em `req.body`.
  * @param {express.Response} res - Objeto de resposta do Express.
  * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
  * @returns {Promise<void>} Retorna o usuário cadastrado com status HTTP 201.
  */
-routes.post("/companies/:id/users", companyController.addUserToCompany);
+routes.post("/companies/:companyId/users", companyController.addUserToCompany);
 
 /**
- * @route GET /companies/:id/users
+ * @route GET /companies/:companyId/users
  * @description Retorna a lista de todos os usuários pertencentes a uma empresa específica.
- * @param {express.Request} req - Objeto de requisição contendo o parâmetro `id` na URL (`req.params.id`).
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` em `req.params`.
  * @param {express.Response} res - Objeto de resposta do Express.
  * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
  * @returns {Promise<void>} Lista de usuários com status HTTP 200.
  */
-routes.get("/companies/:id/users", companyController.getUsersByCompany);
+routes.get("/companies/:companyId/users", companyController.getUsersByCompany);
+
+/**
+ * @route GET /companies/:companyId/users/:userId
+ * @description Busca e retorna os dados de um usuário específico vinculado a uma empresa.
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` e `userId` em `req.params`.
+ * @param {express.Response} res - Objeto de resposta do Express.
+ * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
+ * @returns {Promise<void>} Dados do usuário com status HTTP 200 ou erro 404.
+ */
+routes.get(
+  "/companies/:companyId/users/:userId",
+  companyController.getUserByCompany,
+);
+
+/**
+ * @route PUT /companies/:companyId/users/:userId
+ * @description Atualiza os dados de um usuário vinculado a uma empresa específica.
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` e `userId` em `req.params` e os novos dados em `req.body`.
+ * @param {express.Response} res - Objeto de resposta do Express.
+ * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
+ * @returns {Promise<void>} Usuário atualizado com status HTTP 200.
+ */
+routes.put(
+  "/companies/:companyId/users/:userId",
+  companyController.updateUserByCompany,
+);
+
+/**
+ * @route DELETE /companies/:companyId/users/:userId
+ * @description Realiza a exclusão lógica (Soft Delete) de um usuário vinculado a uma empresa.
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` e `userId` em `req.params`.
+ * @param {express.Response} res - Objeto de resposta do Express.
+ * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
+ * @returns {Promise<void>} Mensagem de confirmação de remoção com status HTTP 200.
+ */
+routes.delete(
+  "/companies/:companyId/users/:userId",
+  companyController.deleteUserByCompany,
+);
+
+/**
+ * ==========================================
+ * ROTAS PRINCIPAIS DA ENTIDADE (COMPANIES)
+ * ==========================================
+ */
 
 /**
  * @route GET /companies
@@ -70,7 +121,7 @@ routes.put("/companies/:id", companyController.update);
 
 /**
  * @route DELETE /companies/:id
- * @description Realiza a exclusão (Soft Delete) de uma empresa pelo ID.
+ * @description Realiza a exclusão (Soft Delete) de uma empresa pelo ID e em cascata para seus usuários.
  * @param {express.Request} req - Objeto de requisição contendo o parâmetro `id` na URL.
  * @param {express.Response} res - Objeto de resposta do Express.
  * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.

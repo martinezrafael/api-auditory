@@ -1,17 +1,78 @@
 import "dotenv/config";
 import app from "./src/app.js";
+import connectToDatabase from "./src/database/config/database.js";
 import chalk from "chalk";
 
 /**
- * Porta de execução do servidor HTTP, obtida das variáveis de ambiente.
+ * Porta de execução do servidor HTTP obtida do ambiente ou fallback para 3000.
  * @type {number|string}
  */
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 /**
- * Inicializa o servidor HTTP do Express ouvindo a porta configurada no ambiente.
- * Exibe no terminal uma mensagem de confirmação formatada com fundo magenta via Chalk.
+ * Inicializa a aplicação estabelecendo a conexão com o banco de dados
+ * e, em seguida, subindo o servidor HTTP do Express.
  */
-app.listen(PORT, () => {
-  console.log(chalk.bgMagenta(`Server running on port: ${PORT} [express]`));
-});
+async function startServer() {
+  try {
+    // Inicializa a conexão com o banco de dados
+    const connection = await connectToDatabase();
+
+    connection.on("error", (erro) => {
+      console.error(
+        chalk.bgRed("[Database] Erro de conexão com o banco de dados:"),
+        erro,
+      );
+    });
+
+    connection.once("open", () => {
+      console.log(
+        chalk.bgGreen.black(
+          "[Database] Conexão com o banco de dados estabelecida com sucesso! ",
+        ),
+      );
+    });
+
+    // Inicializa o servidor HTTP do Express
+    const server = app.listen(PORT, () => {
+      console.log(
+        chalk.bgMagenta.black(`[express] Servidor rodando na porta: ${PORT}.`),
+      );
+    });
+
+    // Trata o encerramento gracioso (Graceful Shutdown)
+    const gracefulShutdown = (signal) => {
+      console.log(
+        chalk.yellow(
+          `\n[express] Recebido sinal ${signal}. Encerrando servidor HTTP...`,
+        ),
+      );
+      server.close(() => {
+        console.log(
+          chalk.red(
+            "[express] Servidor HTTP encerrado. Fechando conexão com o banco...",
+          ),
+        );
+        connection.close(false, () => {
+          console.log(
+            chalk.gray(
+              "[express] Conexão com o banco fechada. Processo finalizado com sucesso.",
+            ),
+          );
+          process.exit(0);
+        });
+      });
+    };
+
+    process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+    process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+  } catch (error) {
+    console.error(
+      chalk.bgRed.white(" [app] Falha crítica ao inicializar a aplicação: "),
+      error,
+    );
+    process.exit(1);
+  }
+}
+
+startServer();

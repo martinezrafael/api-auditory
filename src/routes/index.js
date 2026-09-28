@@ -24,13 +24,20 @@ const routes = (app) => {
   // Middleware para parsing de corpos de requisição em formato JSON
   app.use(express.json());
 
-  // Módulo de Usuários
-  app.use(userRoutes);
+  // Rota de verificação de integridade/saúde do serviço (Health Check)
+  app.get("/health", (req, res) => {
+    return res.status(200).json({
+      status: "OK",
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    });
+  });
 
-  // Módulo de Empresas
+  // Módulo de Usuários e Empresas
+  app.use(userRoutes);
   app.use(companyRoutes);
 
-  // Módulo Bancário (Bancos, Contas Bancárias e Transações Bancárias)
+  // Módulo Bancário (Bancos, Contas Bancárias e Transações)
   app.use(bankRoutes);
   app.use(bankAccountRoutes);
   app.use(bankTransactionRoutes);
@@ -42,20 +49,25 @@ const routes = (app) => {
   app.use(creditRequestRoutes);
   app.use(creditOfferRoutes);
 
-  // Módulo de Adquirentes / Credenciadoras
+  // Módulo de Adquirentes e Transações de Cartão
   app.use(cardAcquirerRoutes);
-
-  // Módulo de Transações de Cartão
   app.use(cardTransactionRoutes);
 
   // Módulo de Taxas Contratuais
   app.use(contractFeeRoutes);
 
-  // Módulo de Auditoria
+  // Módulo de Auditoria e Documentos
   app.use(auditRoutes);
-
-  // Módulo de Documentos
   app.use(documentRoutes);
+
+  // Middleware para captura de rotas inexistentes (404)
+  app.use((req, res) => {
+    return res.status(404).json({
+      error: "Rota não encontrada",
+      path: req.originalUrl,
+      method: req.method,
+    });
+  });
 };
 
 export default routes;

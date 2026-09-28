@@ -11,20 +11,21 @@ import NotFoundError from "../errors/NotFoundError.js";
  * @param {import("express").NextFunction} next - Função middleware do Express para avançar na cadeia.
  * @returns {import("express").Response} Resposta HTTP formatada com código de status e mensagem correspondente.
  */
+// eslint-disable-next-line no-unused-vars
 function errorHandler(error, req, res, next) {
-  // Trata exceções do tipo NotFoundError (HTTP 404)
+  // 1. Trata exceções do tipo NotFoundError customizadas (HTTP 404)
   if (error instanceof NotFoundError) {
-    return res.status(error.status).json({ message: error.message });
+    return res.status(error.status || 404).json({ message: error.message });
   }
 
-  // Trata erros de conversão de tipos do Mongoose (ex: ID inválido em req.params) (HTTP 400)
+  // 2. Trata erros de conversão de tipos do Mongoose (ex: ID no formato inválido) (HTTP 400)
   if (error instanceof mongoose.Error.CastError) {
     return res.status(400).json({
       message: "Um ou mais dados fornecidos estão incorretos.",
     });
   }
 
-  // Trata erros de validação de esquemas do Mongoose (campos obrigatórios, enums, etc.) (HTTP 400)
+  // 3. Trata erros de validação de esquemas do Mongoose (HTTP 400)
   if (error instanceof mongoose.Error.ValidationError) {
     const errorMessages = Object.values(error.errors).map((val) => val.message);
     return res.status(400).json({
@@ -33,11 +34,28 @@ function errorHandler(error, req, res, next) {
     });
   }
 
-  // Loga o erro não tratado e retorna erro interno do servidor (HTTP 500)
-  console.error(error);
+  // 4. Trata erros de duplicação do MongoDB (E11000 - unique constraint index) (HTTP 400/409)
+  if (error.code === 11000) {
+    const field = Object.keys(error.keyPattern || {})[0] || "campo";
+    return res.status(400).json({
+      message: `O valor informado para o campo '${field}' já está em uso no sistema.`,
+    });
+  }
+
+  // 5. Trata erros de negócio com statusCode atribuído dinamicamente (ex: error.statusCode = 400)
+  const statusCode = error.statusCode || error.status;
+  if (statusCode && statusCode >= 400 && statusCode < 500) {
+    return res.status(statusCode).json({
+      message: error.message,
+    });
+  }
+
+  // 6. Loga exceções inesperadas do servidor (HTTP 500)
+  console.error("Uncaught Error:", error);
+
   return res.status(500).json({
     message: "Erro interno de servidor.",
-    error: error.message,
+    ...(process.env.NODE_ENV === "development" && { error: error.message }),
   });
 }
 
