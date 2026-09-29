@@ -88,8 +88,19 @@ const BankModel = new mongoose.Schema(
     versionKey: false,
     /** Adiciona automaticamente os campos `createdAt` e `updatedAt`. */
     timestamps: true,
+    /** Garante que campos virtuais sejam incluídos nas respostas JSON. */
+    toJSON: { virtuals: true },
+    /** Garante que campos virtuais sejam incluídos na conversão para objeto JavaScript puro. */
+    toObject: { virtuals: true },
   },
 );
+
+BankModel.virtual("bankAccounts", {
+  ref: "bankAccounts",
+  localField: "_id",
+  foreignField: "bank",
+  match: { isDeleted: { $ne: true } },
+});
 
 /**
  * Modelo de dados do Mongoose para a coleção 'banks'.

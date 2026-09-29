@@ -15,6 +15,19 @@ class BankController extends BaseController {
   constructor() {
     super(bankService);
   }
+
+  addAccountToBank = async (req, res, next) => {
+    try {
+      const { bankId } = req.params;
+      const account = await this.service.addAccountToBank(bankId, req.body);
+      return res.status(201).json({
+        message: "Conta bancária vinculada com sucesso.",
+        data: account,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 /**

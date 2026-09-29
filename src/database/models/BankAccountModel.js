@@ -20,17 +20,6 @@ import mongoose from "mongoose";
 const BankAccountModel = new mongoose.Schema(
   {
     /**
-     * Referência à empresa titular da conta bancária.
-     * @type {mongoose.Schema.Types.ObjectId}
-     * @see {@link Company} - Relacionamento com o model/coleção 'companies'.
-     */
-    company: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "companies",
-      required: [true, "O campo 'Empresa' é obrigatório."],
-    },
-
-    /**
      * Referência à instituição bancária associada.
      * @type {mongoose.Schema.Types.ObjectId}
      * @see {@link Bank} - Relacionamento com o model/coleção 'banks'.

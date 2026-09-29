@@ -37,11 +37,10 @@ class BankRepository extends BaseRepository {
    * @param {Object} criteria - Critérios adicionais de busca (ex: bankCode, documentNumber).
    * @returns {Promise<import("mongoose").Document|null>}
    */
-  async findOneByCompany(companyId, criteria) {
+  async findOneByCompany(companyId) {
     return this.model.findOne({
       company: companyId,
       isDeleted: { $ne: true },
-      ...criteria,
     });
   }
 

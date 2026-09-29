@@ -1,5 +1,6 @@
 import BaseService from "./BaseService.js";
-import bankRepository from "../database/repositories/BankRepository.js";
+import BankRepository from "../database/repositories/BankRepository.js";
+import BankAccountRepository from "../database/repositories/BankAccountRepository.js";
 
 /**
  * Serviço responsável por conter as regras de negócio relativas à entidade de Bancos.
@@ -10,10 +11,28 @@ import bankRepository from "../database/repositories/BankRepository.js";
  */
 class BankService extends BaseService {
   /**
-   * Instancia o `BankService` fornecendo o `bankRepository` para a classe base.
+   * Instancia o `BankService` fornecendo o `BankRepository` para a classe base.
    */
   constructor() {
-    super(bankRepository);
+    super(BankRepository);
+  }
+
+  /* =========================================================================
+   * MÉTODOS PRIVADOS & UTILITÁRIOS
+   * ========================================================================= */
+
+  /**
+   * Método auxiliar para criação de objetos de Erro com código de status HTTP.
+   *
+   * @private
+   * @param {string} message - Mensagem do erro.
+   * @param {number} statusCode - Código de status HTTP.
+   * @returns {Error} Objeto de Erro configurado.
+   */
+  #createError(message, statusCode) {
+    const error = new Error(message);
+    error.statusCode = statusCode;
+    return error;
   }
 
   /**
@@ -47,6 +66,36 @@ class BankService extends BaseService {
 
     const bank = await super.create(data);
     return bank;
+  }
+
+  /**
+   * Associa e cadastra uma nova conta bancária a uma instituição bancária previamente cadastrada.
+   */
+  async addAccountToBank(bankId, accountData) {
+    if (!accountData) {
+      throw this.#createError(
+        "Os dados da conta ('accountData') são obrigatórios.",
+        400,
+      );
+    }
+
+    const bank = await this.getById(bankId);
+
+    const existingAccount = await BankAccountRepository.findOneByBank(
+      bank._id,
+      {
+        accountNumber: accountData.accountNumber,
+      },
+    );
+
+    if (existingAccount) {
+      throw this.#createError("Está conta já está cadastrada.", 409);
+    }
+
+    return BankAccountRepository.create({
+      ...accountData,
+      bank: bank._id,
+    });
   }
 }
 

@@ -17,6 +17,8 @@ const routes = express.Router();
  */
 routes.post("/banks", BankController.create);
 
+routes.post("/banks/:bankId/bank-accounts", BankController.addAccountToBank);
+
 /**
  * @route GET /banks
  * @description Retorna a lista de todas as instituições bancárias cadastradas.
