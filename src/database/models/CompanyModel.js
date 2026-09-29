@@ -158,6 +158,19 @@ CompanyModel.virtual("users", {
 });
 
 /**
+ * Campo virtual 'banks' para popular os bancos associados à empresa via Mongoose Populate.
+ * Realiza a junção buscando na coleção 'banks' onde o campo 'company' corresponde ao `_id` da empresa atual.
+ *
+ * @see {@link Bank}
+ */
+CompanyModel.virtual("banks", {
+  ref: "banks",
+  localField: "_id",
+  foreignField: "company",
+  match: { isDeleted: { $ne: true } },
+});
+
+/**
  * Modelo de dados do Mongoose para a coleção 'companies'.
  * Interface para realização de operações de banco de dados da entidade Empresa.
  *

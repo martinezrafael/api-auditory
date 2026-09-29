@@ -34,6 +34,8 @@ routes.post("/companies/users", companyController.createCompanyWithUser);
  */
 routes.post("/companies/:companyId/users", companyController.addUserToCompany);
 
+routes.post("/companies/:companyId/banks", companyController.addBankToCompany);
+
 /**
  * @route GET /companies/:companyId/users
  * @description Retorna a lista de todos os usuários pertencentes a uma empresa específica.
@@ -44,6 +46,7 @@ routes.post("/companies/:companyId/users", companyController.addUserToCompany);
  */
 routes.get("/companies/:companyId/users", companyController.getUsersByCompany);
 
+routes.get("/companies/:companyId/banks", companyController.getBanksByCompany);
 /**
  * @route GET /companies/:companyId/users/:userId
  * @description Busca e retorna os dados de um usuário específico vinculado a uma empresa.

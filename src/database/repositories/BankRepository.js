@@ -17,6 +17,35 @@ class BankRepository extends BaseRepository {
   }
 
   /**
+   * Busca todos os bancos ativos vinculados a uma determinada empresa.
+   *
+   * @async
+   * @param {string|import("mongoose").Types.ObjectId} companyId - Identificador único da empresa.
+   * @returns {Promise<Array<import("mongoose").Document>>} Lista de documentos de usuários vinculados à empresa.
+   */
+  async findByCompanyId(companyId) {
+    return this.model.find({
+      company: companyId,
+      isDeleted: { $ne: true },
+    });
+  }
+
+  /**
+   * Busca um banco ativo vinculado a uma empresa com base em um critério específico.
+   *
+   * @param {string|import("mongoose").Types.ObjectId} companyId - ID da empresa.
+   * @param {Object} criteria - Critérios adicionais de busca (ex: bankCode, documentNumber).
+   * @returns {Promise<import("mongoose").Document|null>}
+   */
+  async findOneByCompany(companyId, criteria) {
+    return this.model.findOne({
+      company: companyId,
+      isDeleted: { $ne: true },
+      ...criteria,
+    });
+  }
+
+  /**
    * Busca um banco ativo (não marcado com soft delete) pelo número do CNPJ.
    *
    * @param {string} cnpj - Número do CNPJ a ser consultado (`documentNumber`).

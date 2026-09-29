@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import BaseService from "./BaseService.js";
 import companyRepository from "../database/repositories/CompanyRepository.js";
 import userRepository from "../database/repositories/UserRepository.js";
+import BankRepository from "../database/repositories/BankRepository.js";
 
 /**
  * Serviço responsável pela lógica de negócios da entidade de Empresas (`Company`).
@@ -191,6 +192,37 @@ class CompanyService extends BaseService {
   }
 
   /**
+   * Associa e cadastra uma nova instituição bancária a uma empresa previamente cadastrada.
+   */
+  async addBankToCompany(companyId, bankData) {
+    if (!bankData) {
+      throw this.#createError(
+        "Os dados do banco ('bankData') são obrigatórios.",
+        400,
+      );
+    }
+
+    const company = await this.getById(companyId);
+
+    // Valida se já existe um banco cadastrado com o mesmo código (ou CNPJ) para esta empresa
+    const existingBank = await BankRepository.findOneByCompany(company._id, {
+      bankCode: bankData.bankCode, // ou documentNumber, dependendo da sua regra de negócio
+    });
+
+    if (existingBank) {
+      throw this.#createError(
+        "Esta instituição bancária já está cadastrada para esta empresa.",
+        409,
+      );
+    }
+
+    return BankRepository.create({
+      ...bankData,
+      company: company._id,
+    });
+  }
+
+  /**
    * Retorna a lista de usuários vinculados a uma empresa específica.
    *
    * @async
@@ -201,6 +233,11 @@ class CompanyService extends BaseService {
   async getUsersByCompanyId(companyId) {
     await this.getById(companyId);
     return userRepository.findByCompanyId(companyId);
+  }
+
+  async getBanksByCompanyId(companyId) {
+    await this.getById(companyId);
+    return BankRepository.findByCompanyId(companyId);
   }
 
   /**

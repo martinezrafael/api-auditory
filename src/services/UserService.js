@@ -1,6 +1,5 @@
 import BaseService from "./BaseService.js";
 import userRepository from "../database/repositories/UserRepository.js";
-import bcrypt from "bcrypt";
 
 /**
  * Serviço responsável pela regra de negócio relacionada à entidade de Usuários.

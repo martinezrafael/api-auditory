@@ -76,6 +76,19 @@ class CompanyController extends BaseController {
     }
   };
 
+  addBankToCompany = async (req, res, next) => {
+    try {
+      const { companyId } = req.params;
+      const bank = await this.service.addBankToCompany(companyId, req.body);
+      return res.status(201).json({
+        message: "Banco vinculado à empresa com sucesso.",
+        data: bank,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   /**
    * Recupera a lista de todos os usuários associados a uma empresa específica.
    *
@@ -91,6 +104,16 @@ class CompanyController extends BaseController {
       const { companyId } = req.params;
       const users = await this.service.getUsersByCompanyId(companyId);
       return res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getBanksByCompany = async (req, res, next) => {
+    try {
+      const { companyId } = req.params;
+      const banks = await this.service.getBanksByCompanyId(companyId);
+      return res.status(200).json(banks);
     } catch (error) {
       next(error);
     }
