@@ -90,16 +90,6 @@ routes.delete(
  */
 
 /**
- * @route GET /companies
- * @description Retorna a lista de todas as empresas ativas cadastradas com os dados de usuários populados.
- * @param {express.Request} req - Objeto de requisição do Express.
- * @param {express.Response} res - Objeto de resposta do Express.
- * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
- * @returns {Promise<void>} Lista de empresas com status HTTP 200.
- */
-routes.get("/companies", companyController.getAll);
-
-/**
  * @route GET /companies/:id
  * @description Busca e retorna os detalhes de uma empresa específica pelo ID.
  * @param {express.Request} req - Objeto de requisição contendo o parâmetro `id` na URL (`req.params.id`).
@@ -118,15 +108,5 @@ routes.get("/companies/:id", companyController.getById);
  * @returns {Promise<void>} Empresa atualizada com status HTTP 200.
  */
 routes.put("/companies/:id", companyController.update);
-
-/**
- * @route DELETE /companies/:id
- * @description Realiza a exclusão (Soft Delete) de uma empresa pelo ID e em cascata para seus usuários.
- * @param {express.Request} req - Objeto de requisição contendo o parâmetro `id` na URL.
- * @param {express.Response} res - Objeto de resposta do Express.
- * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
- * @returns {Promise<void>} Mensagem de confirmação de exclusão com status HTTP 200.
- */
-routes.delete("/companies/:id", companyController.delete);
 
 export default routes;
