@@ -4,7 +4,7 @@ import companyService from "../services/CompanyService.js";
 /**
  * Controller responsável por manipular as requisições HTTP da entidade Company.
  * Herda as operações genéricas de CRUD da classe BaseController e expõe
- * endpoints específicos para a gestão do relacionamento entre Empresas e Usuários.
+ * endpoints específicos para a gestão do relacionamento entre Empresas, Usuários e Bancos.
  *
  * @class CompanyController
  * @extends {BaseController}
@@ -28,7 +28,54 @@ class CompanyController extends BaseController {
   }
 
   /* =========================================================================
-   * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS
+   * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS (BANCOS)
+   * ========================================================================= */
+
+  /**
+   * Adiciona um novo registro/conta bancária a uma empresa já existente.
+   *
+   * @route POST /companies/:companyId/banks
+   * @async
+   * @param {import("express").Request} req - Requisição com `companyId` nos parâmetros e dados do banco no corpo.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 201 com os dados bancários criados.
+   */
+  addBankToCompany = async (req, res, next) => {
+    try {
+      const { companyId } = req.params;
+      const bank = await this.service.addBankToCompany(companyId, req.body);
+      return res.status(201).json({
+        message: "Banco vinculado à empresa com sucesso.",
+        data: bank,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Recupera a lista de todas as contas bancárias associadas a uma empresa específica.
+   *
+   * @route GET /companies/:companyId/banks
+   * @async
+   * @param {import("express").Request} req - Requisição contendo o ID da empresa em `req.params.companyId`.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com o array de bancos.
+   */
+  getBanksByCompany = async (req, res, next) => {
+    try {
+      const { companyId } = req.params;
+      const banks = await this.service.getBanksByCompanyId(companyId);
+      return res.status(200).json(banks);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /* =========================================================================
+   * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS (USUÁRIOS)
    * ========================================================================= */
 
   /**
@@ -76,19 +123,6 @@ class CompanyController extends BaseController {
     }
   };
 
-  addBankToCompany = async (req, res, next) => {
-    try {
-      const { companyId } = req.params;
-      const bank = await this.service.addBankToCompany(companyId, req.body);
-      return res.status(201).json({
-        message: "Banco vinculado à empresa com sucesso.",
-        data: bank,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-
   /**
    * Recupera a lista de todos os usuários associados a uma empresa específica.
    *
@@ -104,16 +138,6 @@ class CompanyController extends BaseController {
       const { companyId } = req.params;
       const users = await this.service.getUsersByCompanyId(companyId);
       return res.status(200).json(users);
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  getBanksByCompany = async (req, res, next) => {
-    try {
-      const { companyId } = req.params;
-      const banks = await this.service.getBanksByCompanyId(companyId);
-      return res.status(200).json(banks);
     } catch (error) {
       next(error);
     }

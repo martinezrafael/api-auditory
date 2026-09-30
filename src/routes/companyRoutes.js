@@ -10,6 +10,32 @@ const routes = express.Router();
 
 /**
  * ==========================================
+ * ROTAS COMPOSTAS E SUB-RECURSOS (BANCOS)
+ * ==========================================
+ */
+
+/**
+ * @route POST /companies/:companyId/banks
+ * @description Associa e cadastra uma nova conta/dados bancários a uma empresa existente.
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` em `req.params` e dados do banco em `req.body`.
+ * @param {express.Response} res - Objeto de resposta do Express.
+ * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
+ * @returns {Promise<void>} Retorna os dados bancários cadastrados com status HTTP 201.
+ */
+routes.post("/companies/:companyId/banks", companyController.addBankToCompany);
+
+/**
+ * @route GET /companies/:companyId/banks
+ * @description Retorna a lista de todos os registros bancários vinculados a uma empresa específica.
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` em `req.params`.
+ * @param {express.Response} res - Objeto de resposta do Express.
+ * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
+ * @returns {Promise<void>} Lista de bancos com status HTTP 200.
+ */
+routes.get("/companies/:companyId/banks", companyController.getBanksByCompany);
+
+/**
+ * ==========================================
  * ROTAS COMPOSTAS E SUB-RECURSOS (USUÁRIOS)
  * ==========================================
  */
@@ -34,8 +60,6 @@ routes.post("/companies/users", companyController.createCompanyWithUser);
  */
 routes.post("/companies/:companyId/users", companyController.addUserToCompany);
 
-routes.post("/companies/:companyId/banks", companyController.addBankToCompany);
-
 /**
  * @route GET /companies/:companyId/users
  * @description Retorna a lista de todos os usuários pertencentes a uma empresa específica.
@@ -46,7 +70,6 @@ routes.post("/companies/:companyId/banks", companyController.addBankToCompany);
  */
 routes.get("/companies/:companyId/users", companyController.getUsersByCompany);
 
-routes.get("/companies/:companyId/banks", companyController.getBanksByCompany);
 /**
  * @route GET /companies/:companyId/users/:userId
  * @description Busca e retorna os dados de um usuário específico vinculado a uma empresa.

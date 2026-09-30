@@ -8,7 +8,7 @@ import BankRepository from "../database/repositories/BankRepository.js";
 /**
  * Serviço responsável pela lógica de negócios da entidade de Empresas (`Company`).
  * Herda operações genéricas da classe `BaseService` e orquestra transações complexas
- * envolvendo criação, associação e gestão de usuários vinculados.
+ * envolvendo criação, associação e gestão de usuários e bancos vinculados.
  *
  * @class CompanyService
  * @extends {BaseService}
@@ -193,6 +193,12 @@ class CompanyService extends BaseService {
 
   /**
    * Associa e cadastra uma nova instituição bancária a uma empresa previamente cadastrada.
+   *
+   * @async
+   * @param {string|mongoose.Types.ObjectId} companyId - ID único da empresa existente.
+   * @param {Object} bankData - Dados do registro bancário a ser cadastrado e vinculado.
+   * @returns {Promise<Object>} O documento do banco criado.
+   * @throws {Error} Lança erro 400 se `bankData` for omitido, 409 se o banco já estiver cadastrado para a empresa, e 404 se a empresa não for encontrada.
    */
   async addBankToCompany(companyId, bankData) {
     if (!bankData) {
@@ -204,9 +210,8 @@ class CompanyService extends BaseService {
 
     const company = await this.getById(companyId);
 
-    // Valida se já existe um banco cadastrado com o mesmo código (ou CNPJ) para esta empresa
     const existingBank = await BankRepository.findOneByCompany(company._id, {
-      bankCode: bankData.bankCode, // ou documentNumber, dependendo da sua regra de negócio
+      bankCode: bankData.bankCode,
     });
 
     if (existingBank) {
@@ -235,6 +240,14 @@ class CompanyService extends BaseService {
     return userRepository.findByCompanyId(companyId);
   }
 
+  /**
+   * Retorna a lista de registros bancários vinculados a uma empresa específica.
+   *
+   * @async
+   * @param {string|mongoose.Types.ObjectId} companyId - ID único da empresa.
+   * @returns {Promise<Object[]>} Lista de bancos da empresa.
+   * @throws {Error} Lança erro com `statusCode = 404` se a empresa não for encontrada.
+   */
   async getBanksByCompanyId(companyId) {
     await this.getById(companyId);
     return BankRepository.findByCompanyId(companyId);

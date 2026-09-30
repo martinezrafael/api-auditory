@@ -21,7 +21,7 @@ class BankRepository extends BaseRepository {
    *
    * @async
    * @param {string|import("mongoose").Types.ObjectId} companyId - Identificador único da empresa.
-   * @returns {Promise<Array<import("mongoose").Document>>} Lista de documentos de usuários vinculados à empresa.
+   * @returns {Promise<Array<import("mongoose").Document>>} Lista de documentos de bancos vinculados à empresa.
    */
   async findByCompanyId(companyId) {
     return this.model.find({
@@ -33,20 +33,23 @@ class BankRepository extends BaseRepository {
   /**
    * Busca um banco ativo vinculado a uma empresa com base em um critério específico.
    *
+   * @async
    * @param {string|import("mongoose").Types.ObjectId} companyId - ID da empresa.
-   * @param {Object} criteria - Critérios adicionais de busca (ex: bankCode, documentNumber).
-   * @returns {Promise<import("mongoose").Document|null>}
+   * @param {Object} [criteria={}] - Critérios adicionais de busca (ex: bankCode, documentNumber).
+   * @returns {Promise<import("mongoose").Document|null>} O documento do banco localizado ou null.
    */
-  async findOneByCompany(companyId) {
+  async findOneByCompany(companyId, criteria = {}) {
     return this.model.findOne({
       company: companyId,
       isDeleted: { $ne: true },
+      ...criteria,
     });
   }
 
   /**
    * Busca um banco ativo (não marcado com soft delete) pelo número do CNPJ.
    *
+   * @async
    * @param {string} cnpj - Número do CNPJ a ser consultado (`documentNumber`).
    * @returns {Promise<import("mongoose").Document|null>} O documento do banco localizado ou null.
    */
@@ -60,6 +63,7 @@ class BankRepository extends BaseRepository {
   /**
    * Busca um banco ativo (não marcado com soft delete) pelo código bancário.
    *
+   * @async
    * @param {string} bankCode - Código COMPE/ISPB do banco.
    * @returns {Promise<import("mongoose").Document|null>} O documento do banco localizado ou null.
    */

@@ -35,9 +35,14 @@ class BankService extends BaseService {
     return error;
   }
 
+  /* =========================================================================
+   * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS (Regras de Negócio & Relacionamentos)
+   * ========================================================================= */
+
   /**
    * Sobrescreve o método `create` para validar se o código do banco e o CNPJ já estão cadastrados antes de salvar.
    *
+   * @async
    * @param {Object} data - Dados do banco a ser criado.
    * @param {string} data.bankCode - Código COMPE/ISPB do banco.
    * @param {string} data.documentNumber - CNPJ da instituição bancária.
@@ -70,6 +75,12 @@ class BankService extends BaseService {
 
   /**
    * Associa e cadastra uma nova conta bancária a uma instituição bancária previamente cadastrada.
+   *
+   * @async
+   * @param {string|import("mongoose").Types.ObjectId} bankId - ID único do banco existente.
+   * @param {Object} accountData - Dados da conta bancária a ser cadastrada e vinculada.
+   * @returns {Promise<Object>} O documento da conta bancária criada.
+   * @throws {Error} Lança erro 400 se `accountData` for omitido, 409 se o número da conta já estiver cadastrado para este banco, e 404 se o banco não for encontrado.
    */
   async addAccountToBank(bankId, accountData) {
     if (!accountData) {
@@ -89,7 +100,7 @@ class BankService extends BaseService {
     );
 
     if (existingAccount) {
-      throw this.#createError("Está conta já está cadastrada.", 409);
+      throw this.#createError("Esta conta já está cadastrada.", 409);
     }
 
     return BankAccountRepository.create({
@@ -98,11 +109,28 @@ class BankService extends BaseService {
     });
   }
 
+  /**
+   * Retorna a lista de contas bancárias vinculadas a um banco específico.
+   *
+   * @async
+   * @param {string|import("mongoose").Types.ObjectId} bankId - ID único do banco.
+   * @returns {Promise<Object[]>} Lista de contas bancárias do banco.
+   * @throws {Error} Lança erro com `statusCode = 404` se o banco não for encontrado.
+   */
   async getAccountsByBankId(bankId) {
     await this.getById(bankId);
     return BankAccountRepository.findByBankId(bankId);
   }
 
+  /**
+   * Busca uma conta bancária específica vinculada a um banco pelo ID da conta e do banco.
+   *
+   * @async
+   * @param {string|import("mongoose").Types.ObjectId} bankId - ID único do banco.
+   * @param {string|import("mongoose").Types.ObjectId} accountId - ID único da conta bancária.
+   * @returns {Promise<Object>} Dados da conta bancária localizada.
+   * @throws {Error} Lança erro 404 se o banco ou a conta não forem localizados/não estiverem vinculados.
+   */
   async getAccountByBankIdAndAccountId(bankId, accountId) {
     await this.getById(bankId);
 

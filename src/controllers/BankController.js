@@ -16,6 +16,20 @@ class BankController extends BaseController {
     super(bankService);
   }
 
+  /* =========================================================================
+   * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS (CONTAS BANCÁRIAS)
+   * ========================================================================= */
+
+  /**
+   * Adiciona e vincula uma nova conta bancária a um banco existente.
+   *
+   * @route POST /banks/:bankId/accounts
+   * @async
+   * @param {import("express").Request} req - Objeto de requisição contendo `bankId` em `req.params` e dados da conta em `req.body`.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 201 com os dados da conta criada.
+   */
   addAccountToBank = async (req, res, next) => {
     try {
       const { bankId } = req.params;
@@ -29,6 +43,16 @@ class BankController extends BaseController {
     }
   };
 
+  /**
+   * Recupera a lista de todas as contas bancárias associadas a um banco específico.
+   *
+   * @route GET /banks/:bankId/accounts
+   * @async
+   * @param {import("express").Request} req - Objeto de requisição contendo `bankId` em `req.params`.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com a lista de contas bancárias.
+   */
   getAccountsByBank = async (req, res, next) => {
     try {
       const { bankId } = req.params;
@@ -39,6 +63,16 @@ class BankController extends BaseController {
     }
   };
 
+  /**
+   * Busca os detalhes de uma conta bancária específica vinculada a um banco.
+   *
+   * @route GET /banks/:bankId/accounts/:accountId
+   * @async
+   * @param {import("express").Request} req - Objeto de requisição contendo `bankId` e `accountId` em `req.params`.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com os dados da conta encontrada.
+   */
   getAccountByBank = async (req, res, next) => {
     try {
       const { bankId, accountId } = req.params;
