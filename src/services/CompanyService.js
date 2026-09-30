@@ -254,6 +254,28 @@ class CompanyService extends BaseService {
   }
 
   /**
+   * Busca um banco específico vinculado a uma empresa pelo seu ID.
+   *
+   * @async
+   * @param {string|mongoose.Types.ObjectId} companyId - ID único da empresa.
+   * @param {string|mongoose.Types.ObjectId} bankId - ID único do banco.
+   * @returns {Promise<Object>} Dados do banco localizado.
+   * @throws {Error} Lança erro 404 se a empresa ou o banco não forem localizados.
+   */
+  async getBankWithCompanyIdAndBankId(companyId, bankId) {
+    await this.getById(companyId);
+
+    const bank = await BankRepository.findOneByCompany(companyId, {
+      _id: bankId,
+    });
+    if (!bank) {
+      throw this.#createError("Banco não encontrado nesta empresa.", 404);
+    }
+
+    return bank;
+  }
+
+  /**
    * Busca um usuário específico vinculado a uma empresa pelo seu ID.
    *
    * @async

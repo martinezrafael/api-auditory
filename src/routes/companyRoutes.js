@@ -16,7 +16,7 @@ const routes = express.Router();
 
 /**
  * @route POST /companies/:companyId/banks
- * @description Associa e cadastra uma nova conta/dados bancários a uma empresa existente.
+ * @description Associa e cadastra uma nova instituição bancária a uma empresa existente.
  * @param {express.Request} req - Objeto de requisição contendo `companyId` em `req.params` e dados do banco em `req.body`.
  * @param {express.Response} res - Objeto de resposta do Express.
  * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
@@ -26,13 +26,18 @@ routes.post("/companies/:companyId/banks", companyController.addBankToCompany);
 
 /**
  * @route GET /companies/:companyId/banks
- * @description Retorna a lista de todos os registros bancários vinculados a uma empresa específica.
+ * @description Retorna a lista de todas as instituições bancárias vinculadas a uma empresa específica.
  * @param {express.Request} req - Objeto de requisição contendo `companyId` em `req.params`.
  * @param {express.Response} res - Objeto de resposta do Express.
  * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
  * @returns {Promise<void>} Lista de bancos com status HTTP 200.
  */
 routes.get("/companies/:companyId/banks", companyController.getBanksByCompany);
+
+routes.get(
+  "/companies/:companyId/banks/:bankId",
+  companyController.getBankByCompany,
+);
 
 /**
  * ==========================================

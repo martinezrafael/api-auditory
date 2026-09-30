@@ -47,23 +47,6 @@ class CompanyRepository extends BaseRepository {
   }
 
   /**
-   * Busca uma empresa ativa por ID trazendo relacionamentos populados (`users` e `createdBy`).
-   *
-   * @async
-   * @param {string|import("mongoose").Types.ObjectId} id - ID único da empresa.
-   * @returns {Promise<import("mongoose").Document|null>} O documento da empresa localizada ou `null`.
-   */
-  async findCompanyById(id) {
-    return this.model
-      .findOne({ _id: id, isDeleted: { $ne: true } })
-      .populate("users")
-      .populate({
-        path: "createdBy",
-        match: { isDeleted: { $ne: true } },
-      });
-  }
-
-  /**
    * Busca uma empresa ativa pelo número do CNPJ (`documentNumber`).
    *
    * @async

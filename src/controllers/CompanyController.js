@@ -74,6 +74,19 @@ class CompanyController extends BaseController {
     }
   };
 
+  getBankByCompany = async (req, res, next) => {
+    try {
+      const { companyId, bankId } = req.params;
+      const bank = await this.service.getBankWithCompanyIdAndBankId(
+        companyId,
+        bankId,
+      );
+      return res.status(200).json(bank);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   /* =========================================================================
    * MÉTODOS ESPECÍFICOS / CUSTOMIZADOS (USUÁRIOS)
    * ========================================================================= */
