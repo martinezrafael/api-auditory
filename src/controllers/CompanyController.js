@@ -74,6 +74,16 @@ class CompanyController extends BaseController {
     }
   };
 
+  /**
+   * Busca uma instituição bancária específica vinculada a uma empresa.
+   *
+   * @route GET /companies/:companyId/banks/:bankId
+   * @async
+   * @param {import("express").Request} req - Requisição contendo `companyId` e `bankId` em `req.params`.
+   * @param {import("express").Response} res - Objeto de resposta HTTP.
+   * @param {import("express").NextFunction} next - Middleware para tratamento de erros.
+   * @returns {Promise<import("express").Response>} Resposta HTTP 200 com os dados do banco localizado.
+   */
   getBankByCompany = async (req, res, next) => {
     try {
       const { companyId, bankId } = req.params;
@@ -231,5 +241,6 @@ class CompanyController extends BaseController {
 
 /**
  * Instância exportada como Singleton para ser utilizada diretamente no arquivo de rotas.
+ * @type {CompanyController}
  */
 export default new CompanyController();

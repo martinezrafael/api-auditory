@@ -34,6 +34,14 @@ routes.post("/companies/:companyId/banks", companyController.addBankToCompany);
  */
 routes.get("/companies/:companyId/banks", companyController.getBanksByCompany);
 
+/**
+ * @route GET /companies/:companyId/banks/:bankId
+ * @description Busca e retorna os dados de uma instituição bancária específica vinculada a uma empresa.
+ * @param {express.Request} req - Objeto de requisição contendo `companyId` e `bankId` em `req.params`.
+ * @param {express.Response} res - Objeto de resposta do Express.
+ * @param {express.NextFunction} next - Função middleware do Express para repasse de erros.
+ * @returns {Promise<void>} Dados do banco com status HTTP 200 ou erro 404.
+ */
 routes.get(
   "/companies/:companyId/banks/:bankId",
   companyController.getBankByCompany,
