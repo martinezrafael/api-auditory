@@ -97,6 +97,11 @@ class BankService extends BaseService {
       bank: bank._id,
     });
   }
+
+  async getAccountsByBankId(bankId) {
+    await this.getById(bankId);
+    return BankAccountRepository.findByBankId(bankId);
+  }
 }
 
 /**

@@ -16,6 +16,13 @@ class BankAccountRepository extends BaseRepository {
     super(bankAccountModel);
   }
 
+  async findByBankId(bankId) {
+    return this.model.find({
+      bank: bankId,
+      isDeleted: { $ne: true },
+    });
+  }
+
   async findOneByBank(bankId) {
     return this.model.findOne({
       bank: bankId,

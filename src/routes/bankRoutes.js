@@ -19,6 +19,8 @@ routes.post("/banks", BankController.create);
 
 routes.post("/banks/:bankId/bank-accounts", BankController.addAccountToBank);
 
+routes.get("/banks/:bankId/bank-accounts", BankController.getAccountsByBank);
+
 /**
  * @route GET /banks
  * @description Retorna a lista de todas as instituições bancárias cadastradas.

@@ -28,6 +28,16 @@ class BankController extends BaseController {
       next(error);
     }
   };
+
+  getAccountsByBank = async (req, res, next) => {
+    try {
+      const { bankId } = req.params;
+      const accounts = await this.service.getAccountsByBankId(bankId);
+      return res.status(200).json(accounts);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 /**
