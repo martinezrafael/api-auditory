@@ -102,6 +102,21 @@ class BankService extends BaseService {
     await this.getById(bankId);
     return BankAccountRepository.findByBankId(bankId);
   }
+
+  async getAccountByBankIdAndAccountId(bankId, accountId) {
+    await this.getById(bankId);
+
+    const account = await BankAccountRepository.findByBankIdAndAccountId(
+      bankId,
+      accountId,
+    );
+
+    if (!account) {
+      throw this.#createError("Conta não encontrada", 404);
+    }
+
+    return account;
+  }
 }
 
 /**

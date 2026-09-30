@@ -23,10 +23,19 @@ class BankAccountRepository extends BaseRepository {
     });
   }
 
-  async findOneByBank(bankId) {
+  async findByBankIdAndAccountId(bankId, accountId) {
+    return this.model.findOne({
+      _id: accountId,
+      bank: bankId,
+      isDeleted: { $ne: true },
+    });
+  }
+
+  async findOneByBank(bankId, criteria = {}) {
     return this.model.findOne({
       bank: bankId,
       isDeleted: { $ne: true },
+      ...criteria,
     });
   }
 }

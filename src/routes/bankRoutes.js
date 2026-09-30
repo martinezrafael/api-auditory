@@ -20,6 +20,10 @@ routes.post("/banks", BankController.create);
 routes.post("/banks/:bankId/bank-accounts", BankController.addAccountToBank);
 
 routes.get("/banks/:bankId/bank-accounts", BankController.getAccountsByBank);
+routes.get(
+  "/banks/:bankId/bank-accounts/:accountId",
+  BankController.getAccountByBank,
+);
 
 /**
  * @route GET /banks
