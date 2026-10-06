@@ -31,22 +31,6 @@ class CompanyRepository extends BaseRepository {
    * ========================================================================= */
 
   /**
-   * Busca todas as empresas ativas trazendo relacionamentos populados (`users` e `createdBy`).
-   *
-   * @async
-   * @returns {Promise<Array<import("mongoose").Document>>} Lista de empresas ativas com dados vinculados.
-   */
-  async findCompanies() {
-    return this.model
-      .find({ isDeleted: { $ne: true } })
-      .populate("users")
-      .populate({
-        path: "createdBy",
-        match: { isDeleted: { $ne: true } },
-      });
-  }
-
-  /**
    * Busca uma empresa ativa pelo número do CNPJ (`documentNumber`).
    *
    * @async
